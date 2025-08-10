@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "asl_backend": {
+      "candid": "src/asl_backend/asl_backend.did",
+      "package": "asl_backend",
+      "type": "rust"
+    },
+    "asl_frontend": {
+      "dependencies": [
+        "asl_backend"
+      ],
+      "source": [
+        "src/asl_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "asl_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
