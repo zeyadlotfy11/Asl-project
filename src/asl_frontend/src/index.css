@@ -1,0 +1,94 @@
+/* Egyptian-themed custom styles */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --toast-bg: #fff;
+  --toast-color: #1f2937; /* Tailwind gray-900 */
+}
+
+[data-theme="dark"] {
+  --toast-bg: #1f2937; /* Tailwind gray-800 */
+  --toast-color: #f3f4f6; /* Tailwind gray-100 */
+}
+
+/* Custom font for Egyptian feel */
+.font-serif {
+  font-family: 'Crimson Text', serif;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .rtl\:space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FEF3C7; /* Tailwind amber-100 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f59e0b; /* Tailwind amber-400 */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d97706; /* Tailwind amber-500 */
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937; /* Tailwind gray-800 */
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #b45309; /* Tailwind amber-600 */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #d97706; /* Tailwind amber-500 */
+}
+
+/* Animation utilities */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Egyptian pattern background */
+.egyptian-pattern {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(245, 158, 11, 0.1) 10px,
+      rgba(245, 158, 11, 0.1) 20px
+    );
+}

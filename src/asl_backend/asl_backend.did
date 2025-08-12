@@ -1,3 +1,354 @@
+type ArtifactStatus = variant {
+    PendingVerification;
+    Verified;
+    Disputed;
+    Rejected;
+};
+
+type UserRole = variant {
+    Institution;
+    Expert;
+    Moderator;
+    Community;
+};
+
+type ProposalType = variant {
+    VerifyArtifact;
+    DisputeArtifact;
+    UpdateArtifactStatus;
+    GrantUserRole;
+};
+
+type ProposalStatus = variant {
+    Active;
+    Passed;
+    Rejected;
+    Executed;
+};
+
+type VoteType = variant {
+    For;
+    Against;
+    Abstain;
+};
+
+type AccessRights = variant {
+    Public;
+    Restricted;
+    Private;
+};
+
+type HistoryEntry = record {
+    timestamp: nat64;
+    action: text;
+    actor: principal;
+    details: text;
+};
+
+type Artifact = record {
+    id: nat64;
+    name: text;
+    description: text;
+    metadata: vec record { text; text };
+    images: vec text;
+    creator: principal;
+    created_at: nat64;
+    updated_at: nat64;
+    status: ArtifactStatus;
+    heritage_proof: opt text;
+    authenticity_score: nat32;
+    history: vec HistoryEntry;
+};
+
+type ProofOfHeritageNFT = record {
+    id: nat64;
+    artifact_id: nat64;
+    owner: principal;
+    created_at: nat64;
+    metadata: vec record { text; text };
+    is_transferable: bool;
+};
+
+type User = record {
+    role: UserRole;
+    reputation: nat32;
+    verified_at: opt nat64;
+    institution: opt text;
+    specialization: vec text;
+};
+
+type Proposal = record {
+    id: nat64;
+    proposal_type: ProposalType;
+    artifact_id: opt nat64;
+    proposer: principal;
+    title: text;
+    description: text;
+    created_at: nat64;
+    voting_deadline: nat64;
+    votes_for: nat32;
+    votes_against: nat32;
+    voters: vec principal;
+    status: ProposalStatus;
+    execution_payload: opt text;
+};
+
+type Vote = record {
+    voter: principal;
+    vote_type: VoteType;
+    timestamp: nat64;
+    rationale: opt text;
+};
+
+type CreateArtifactRequest = record {
+    name: text;
+    description: text;
+    metadata: vec record { text; text };
+    images: vec text;
+    heritage_proof: opt text;
+};
+
+type CreateProposalRequest = record {
+    proposal_type: ProposalType;
+    artifact_id: opt nat64;
+    title: text;
+    description: text;
+    voting_duration_hours: nat64;
+    execution_payload: opt text;
+};
+
+type ProposalResponse = record {
+    id: nat64;
+    proposal_type: ProposalType;
+    title: text;
+    description: text;
+    status: ProposalStatus;
+    created_at: nat64;
+    voting_deadline: nat64;
+    votes_for: nat32;
+    votes_against: nat32;
+};
+
+type AIAnalysisResult = record {
+    artifact_id: nat64;
+    analysis_type: text;
+    confidence_score: float64;
+    findings: vec text;
+    recommendations: vec text;
+    timestamp: nat64;
+};
+
+type CollaborationRoom = record {
+    id: nat64;
+    name: text;
+    description: text;
+    artifact_id: opt nat64;
+    creator: principal;
+    members: vec principal;
+    created_at: nat64;
+    is_public: bool;
+};
+
+type Message = record {
+    id: nat64;
+    room_id: nat64;
+    sender: principal;
+    content: text;
+    timestamp: nat64;
+    message_type: text;
+    attachments: vec text;
+};
+
+type VirtualEvent = record {
+    id: nat64;
+    title: text;
+    description: text;
+    host: principal;
+    start_time: nat64;
+    duration_minutes: nat32;
+    max_participants: opt nat32;
+    participants: vec principal;
+    event_type: text;
+    meeting_link: opt text;
+};
+
+type AnalyticsReport = record {
+    id: nat64;
+    report_type: text;
+    generated_at: nat64;
+    data: vec record { text; text };
+    insights: vec text;
+    time_range: record { nat64; nat64 };
+};
+
+type PatternAnalysis = record {
+    pattern_type: text;
+    frequency: nat32;
+    confidence: float64;
+    description: text;
+    recommendations: vec text;
+};
+
+type EnhancedNFT = record {
+    id: nat64;
+    token_id: nat64;
+    metadata: vec record { text; text };
+    rarity_score: nat32;
+    utility_features: vec text;
+    created_at: nat64;
+};
+
+type Quest = record {
+    id: nat64;
+    title: text;
+    description: text;
+    objectives: vec text;
+    rewards: vec text;
+    duration_days: nat64;
+    participants: vec principal;
+    status: text;
+};
+
+type UserProgress = record {
+    user: principal;
+    level: nat32;
+    experience_points: nat64;
+    achievements: vec text;
+    completed_quests: vec nat64;
+    badges: vec text;
+};
+
+type SystemStats = record {
+    total_artifacts: nat64;
+    total_proposals: nat64;
+    total_users: nat64;
+    total_nfts: nat64;
+    verified_artifacts: nat64;
+    active_proposals: nat64;
+    last_updated: nat64;
+};
+
+type HealthStatus = record {
+    status: text;
+    timestamp: nat64;
+    version: text;
+    uptime: nat64;
+};
+
+type AuditEntry = record {
+    id: nat64;
+    event_type: text;
+    actor: principal;
+    artifact_id: opt nat64;
+    description: text;
+    timestamp: nat64;
+    severity: text;
+};
+
+type Result = variant { Ok: text; Err: text };
+type Result_1 = variant { Ok: nat64; Err: text };
+type Result_2 = variant { Ok: Artifact; Err: text };
+type Result_3 = variant { Ok: Proposal; Err: text };
+type Result_4 = variant { Ok: User; Err: text };
+type Result_5 = variant { Ok: vec HistoryEntry; Err: text };
+type Result_6 = variant { Ok: AIAnalysisResult; Err: text };
+type Result_7 = variant { Ok: AnalyticsReport; Err: text };
+type Result_8 = variant { Ok: ProofOfHeritageNFT; Err: text };
+type Result_9 = variant { Ok: vec Vote; Err: text };
+type Result_10 = variant { Ok: bool; Err: text };
+
 service : {
+    // ========== USER MANAGEMENT ==========
+    "register_user": (UserRole, opt text, vec text) -> (Result);
+    "verify_user": (principal) -> (Result);
+    "get_user_profile": (principal) -> (Result_4) query;
+    "get_current_user_profile": () -> (Result_4) query;
+
+    // ========== AI ANALYSIS FEATURES ==========
+    "analyze_artifact_with_ai_public": (nat64) -> (Result_6);
+    "add_provenance_entry_public": (nat64, opt text, opt text, vec text) -> (Result_1);
+    "get_ai_analysis_public": (nat64) -> (Result_6) query;
+    "get_similar_artifacts_public": (nat64, opt nat64) -> (vec Artifact) query;
+    "get_provenance_chain_public": (nat64) -> (Result_5) query;
+    "verify_provenance_integrity_public": (nat64) -> (Result_10) query;
+
+    // ========== COLLABORATION FEATURES ==========
+    "create_collaboration_room_public": (text, text, opt nat64, bool) -> (Result_1);
+    "send_message_public": (nat64, text, text, vec text) -> (Result_1);
+    "add_reaction_public": (nat64, text) -> (Result);
+    "create_virtual_event_public": (text, text, nat64, nat32, opt nat32, text) -> (Result_1);
+    "join_event_public": (nat64) -> (Result);
+    "get_collaboration_rooms_public": () -> (vec CollaborationRoom) query;
+    "get_room_messages_public": (nat64, opt nat64) -> (vec Message) query;
+    "get_upcoming_events_public": () -> (vec VirtualEvent) query;
+
+    // ========== ANALYTICS FEATURES ==========
+    "generate_analytics_report_public": (text, opt nat64, opt nat64) -> (Result_1);
+    "get_analytics_report_public": (nat64) -> (Result_7) query;
+    "get_pattern_analysis_public": () -> (vec PatternAnalysis) query;
+
+    // ========== GAMIFICATION FEATURES ==========
+    "mint_enhanced_nft_public": (nat64) -> (Result_1);
+    "award_achievement_public": (principal, text, float64) -> (Result);
+    "create_quest_public": (text, text, nat32) -> (Result_1);
+    "join_quest_public": (nat64) -> (Result);
+    "get_user_progress_public": (principal) -> (opt UserProgress) query;
+    "get_leaderboard_public": (nat64) -> (vec record { principal; nat64 }) query;
+    "get_active_quests_public": () -> (vec Quest) query;
+    "get_enhanced_nft_public": (nat64) -> (opt EnhancedNFT) query;
+    "get_user_nfts_public": (principal) -> (vec EnhancedNFT) query;
+
+    // ========== VOTING SYSTEM FEATURES ==========
+    "vote_on_proposal_public": (nat64, VoteType, opt text) -> (Result);
+    "change_vote_public": (nat64, VoteType, opt text) -> (Result);
+    "get_vote_details_public": (nat64) -> (Result_9) query;
+
+    // ========== DAO PROPOSAL FEATURES ==========
+    "add_comment_to_proposal_public": (nat64, text) -> (Result_1);
+    "create_proposal_public": (CreateProposalRequest) -> (Result_1);
+    "execute_proposal_public": (nat64) -> (Result);
+    "get_proposal_public": (nat64) -> (Result_3) query;
+    "get_all_proposals_public": () -> (vec ProposalResponse) query;
+    "get_active_proposals_public": () -> (vec ProposalResponse) query;
+    "get_proposals_by_status_public": (ProposalStatus) -> (vec ProposalResponse) query;
+
+    // ========== ARTIFACTS MODULE FEATURES ==========
+    "submit_artifact_public": (text, text, text) -> (Result_1);
+    "vote_on_artifact_public": (nat64, bool) -> (Result);
+    "update_artifact_status_public": (nat64, ArtifactStatus) -> (Result);
+    "get_artifact_public": (nat64) -> (Result_2) query;
+    "get_all_artifacts_public": () -> (vec Artifact) query;
+    "search_artifacts_public": (text) -> (vec Artifact) query;
+    "get_artifacts_by_status_public": (ArtifactStatus) -> (vec Artifact) query;
+    "get_artifacts_by_creator_public": (principal) -> (vec Artifact) query;
+
+    // ========== NFT MODULE FEATURES ==========
+    "issue_heritage_nft_public": (nat64) -> (Result_1);
+    "add_expert_endorsement_public": (nat64, text) -> (Result);
+    "update_nft_access_rights_public": (nat64, AccessRights) -> (Result);
+    "get_nft_public": (nat64) -> (Result_8) query;
+    "get_nft_by_artifact_public": (nat64) -> (Result_8) query;
+    "get_nfts_by_owner_public": (principal) -> (vec ProofOfHeritageNFT) query;
+    "get_all_nfts_public": () -> (vec ProofOfHeritageNFT) query;
+
+    // ========== SYSTEM MANAGEMENT ==========
+    "get_system_stats": () -> (SystemStats) query;
+    "get_audit_logs": (opt nat64) -> (vec AuditEntry) query;
+    "get_security_alerts": () -> (vec AuditEntry) query;
+    "health_check": () -> (HealthStatus) query;
+
+    // ========== LEGACY FUNCTIONS ==========
+    "create_artifact": (CreateArtifactRequest) -> (Result_1);
+    "get_artifact": (nat64) -> (Result_2) query;
+    "get_all_artifacts": () -> (vec Artifact) query;
+    "get_artifact_history": (nat64) -> (Result_5) query;
+    "create_proposal": (CreateProposalRequest) -> (Result_1);
+    "vote_on_proposal": (nat64, bool) -> (Result);
+    "execute_proposal": (nat64) -> (Result);
+    "get_proposal": (nat64) -> (Result_3) query;
+    "get_active_proposals": () -> (vec Proposal) query;
+    "get_user_nfts": (principal) -> (vec ProofOfHeritageNFT) query;
+    "verify_institution": (principal) -> (Result);
+    "bootstrap_first_moderator": () -> (Result);
     "greet": (text) -> (text) query;
 }
