@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
-// import { BackendService } from '../services/IntegratedBackendService';
-// import type {
-//     Artifact,
-//     ProposalResponse,
-//     HeritageNFT
-// } from '../services/IntegratedBackendService';
+import { BackendService } from '../services/IntegratedBackendService';
+import type {
+    Artifact,
+    ProposalResponse,
+    HeritageNFT,
+    SystemStats
+} from '../services/IntegratedBackendService';
 import { Principal } from '@dfinity/principal';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 interface DashboardStats {
     totalArtifacts: number;
@@ -23,12 +25,31 @@ const Dashboard: React.FC = () => {
     const { isAuthenticated, principal } = useAuth();
     const { t, isRTL } = useLanguage();
 
+    // Helper functions to display enum values
+    const getArtifactStatusText = (status: any): string => {
+        if (!status) return 'Unknown';
+        if (typeof status === 'object') {
+            const statusKey = Object.keys(status)[0];
+            return statusKey || 'Unknown';
+        }
+        return status.toString();
+    };
+
+    const getProposalTypeText = (proposalType: any): string => {
+        if (!proposalType) return 'General';
+        if (typeof proposalType === 'object') {
+            const typeKey = Object.keys(proposalType)[0];
+            return typeKey || 'General';
+        }
+        return proposalType.toString();
+    };
+
     // State management
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState<DashboardStats | null>(null);
-    const [recentArtifacts, setRecentArtifacts] = useState<any[]>([]);
-    const [activeProposals, setActiveProposals] = useState<any[]>([]);
-    const [userNFTs, setUserNFTs] = useState<any[]>([]);
+    const [recentArtifacts, setRecentArtifacts] = useState<Artifact[]>([]);
+    const [activeProposals, setActiveProposals] = useState<ProposalResponse[]>([]);
+    const [userNFTs, setUserNFTs] = useState<HeritageNFT[]>([]);
 
     // Load dashboard data
     useEffect(() => {
@@ -40,19 +61,40 @@ const Dashboard: React.FC = () => {
     const loadDashboardData = async () => {
         setLoading(true);
         try {
-            // TODO: Load all dashboard data from backend
-            // Mock data for now
-            setStats({
-                totalArtifacts: 0,
-                totalProposals: 0,
-                totalUsers: 0,
-                totalNFTs: 0,
-                verifiedArtifacts: 0,
-                activeProposals: 0
-            });
-            setRecentArtifacts([]);
-            setActiveProposals([]);
-            setUserNFTs([]);
+            // Load system statistics
+            const systemStats = await BackendService.getSystemStats();
+            if (systemStats) {
+                setStats({
+                    totalArtifacts: Number(systemStats.total_artifacts),
+                    totalProposals: Number(systemStats.total_proposals),
+                    totalUsers: Number(systemStats.total_users),
+                    totalNFTs: Number(systemStats.total_nfts),
+                    verifiedArtifacts: Number(systemStats.verified_artifacts),
+                    activeProposals: Number(systemStats.active_proposals)
+                });
+            }
+
+            // Load recent artifacts (get all and take the most recent ones)
+            const allArtifacts = await BackendService.getAllArtifacts();
+            if (allArtifacts) {
+                // Sort by ID (newer artifacts have higher IDs) and take the last 5
+                const sortedArtifacts = allArtifacts.sort((a, b) => Number(b.id) - Number(a.id));
+                setRecentArtifacts(sortedArtifacts.slice(0, 5));
+            }
+
+            // Load active proposals
+            const proposals = await BackendService.getActiveProposals();
+            if (proposals) {
+                setActiveProposals(proposals.slice(0, 5)); // Take first 5 active proposals
+            }
+
+            // Load user's NFTs if authenticated
+            if (principal) {
+                const nfts = await BackendService.getNFTsByOwner(principal);
+                if (nfts) {
+                    setUserNFTs(nfts);
+                }
+            }
 
         } catch (error) {
             console.error('Failed to load dashboard data:', error);
@@ -62,33 +104,13 @@ const Dashboard: React.FC = () => {
         }
     };
 
-    // Handle artifact creation
-    const handleCreateArtifact = async (
-        name: string,
-        description: string,
-        heritageProof: string
-    ) => {
-        try {
-            // TODO: Implement backend integration
-            // const artifactId = await BackendService.submitArtifactPublic(
-            //     name,
-            //     description,
-            //     heritageProof
-            // );
-            toast.success(`Artifact submission pending review`);
-            loadDashboardData(); // Refresh data
-        } catch (error) {
-            toast.error('Failed to create artifact');
-            console.error(error);
-        }
-    };
+
 
     // Handle proposal voting
     const handleVoteOnProposal = async (proposalId: bigint, support: boolean) => {
         try {
-            // TODO: Implement backend integration
-            // const voteType = BackendService.createVoteType(support ? 'For' : 'Against');
-            // await BackendService.voteOnProposal(proposalId, voteType);
+            const voteType = support ? { For: null } : { Against: null };
+            await BackendService.voteOnProposal(proposalId, voteType);
             toast.success('Vote submitted successfully');
             loadDashboardData(); // Refresh data
         } catch (error) {
@@ -100,9 +122,8 @@ const Dashboard: React.FC = () => {
     // Handle NFT minting
     const handleMintNFT = async (artifactId: bigint) => {
         try {
-            // TODO: Implement backend integration
-            // const nftId = await BackendService.issueHeritageNFT(artifactId);
-            toast.success(`Heritage NFT minting pending review`);
+            const nftId = await BackendService.issueHeritageNFT(artifactId);
+            toast.success(`Heritage NFT minted successfully! ID: ${nftId}`);
             loadDashboardData(); // Refresh data
         } catch (error) {
             toast.error('Failed to mint NFT');
@@ -150,8 +171,8 @@ const Dashboard: React.FC = () => {
                             <h1 className="text-3xl font-bold text-amber-900 dark:text-amber-100 font-serif">
                                 🏺 Heritage Dashboard
                             </h1>
-                            <p className="text-amber-700 dark:text-amber-300 mt-2">
-                                Welcome back, {principal?.toString().slice(0, 8)}...
+                            <p className="text-amber-700 dark:text-amber-300 mt-2 break-all">
+                                Welcome back! Principal: {principal?.toString()}
                             </p>
                         </div>
                         <div className="text-right">
@@ -204,14 +225,14 @@ const Dashboard: React.FC = () => {
                                 <div key={index} className="flex items-center justify-between p-3 bg-amber-50 dark:bg-gray-700 rounded-lg">
                                     <div>
                                         <div className="font-medium text-amber-900 dark:text-amber-100">
-                                            {artifact.name || `Artifact ${index}`}
+                                            {artifact.name}
                                         </div>
                                         <div className="text-sm text-amber-600 dark:text-amber-400">
-                                            Status: {artifact.status || 'Pending'}
+                                            Status: {getArtifactStatusText(artifact.status)}
                                         </div>
                                     </div>
                                     <button
-                                        onClick={() => handleMintNFT(BigInt(index))}
+                                        onClick={() => handleMintNFT(artifact.id)}
                                         className="px-3 py-1 bg-amber-600 text-white rounded-lg text-sm hover:bg-amber-700 transition-colors"
                                     >
                                         Mint NFT
@@ -234,20 +255,20 @@ const Dashboard: React.FC = () => {
                             {activeProposals.length > 0 ? activeProposals.map((proposal, index) => (
                                 <div key={index} className="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
                                     <div className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                                        {proposal.title || `Proposal ${index}`}
+                                        {proposal.title}
                                     </div>
                                     <div className="text-sm text-blue-600 dark:text-blue-400 mb-3">
-                                        Type: {proposal.proposal_type || 'General'}
+                                        Type: {getProposalTypeText(proposal.proposal_type)}
                                     </div>
                                     <div className="flex gap-2">
                                         <button
-                                            onClick={() => handleVoteOnProposal(BigInt(index), true)}
+                                            onClick={() => handleVoteOnProposal(proposal.id, true)}
                                             className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors"
                                         >
                                             Vote For
                                         </button>
                                         <button
-                                            onClick={() => handleVoteOnProposal(BigInt(index), false)}
+                                            onClick={() => handleVoteOnProposal(proposal.id, false)}
                                             className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors"
                                         >
                                             Vote Against
@@ -289,26 +310,20 @@ const Dashboard: React.FC = () => {
 
                 {/* Action Buttons */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <button
-                        onClick={() => {
-                            const name = prompt("Artifact Name:");
-                            const description = prompt("Artifact Description:");
-                            const proof = prompt("Heritage Proof:");
-                            if (name && description && proof) {
-                                handleCreateArtifact(name, description, proof);
-                            }
-                        }}
-                        className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 font-semibold"
-                    >
-                        🏺 Submit New Artifact
-                    </button>
+                    <Link to="/create-artifact">
+                        <button
+                            className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 font-semibold"
+                        >
+                            🏺 Submit New Artifact
+                        </button>
+                    </Link>
 
-                    <button
-                        onClick={() => toast.success('Feature coming soon!')}
-                        className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold"
-                    >
-                        🏛️ Create Proposal
-                    </button>
+                    <Link to="/create-proposal">
+                        <button
+                            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold"
+                        >
+                            🏛️ Create Proposal
+                        </button> </Link>
 
                     <button
                         onClick={() => toast.success('AI Analysis coming soon!')}
