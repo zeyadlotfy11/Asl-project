@@ -49,6 +49,11 @@ const Navbar: React.FC = () => {
                                     src="/Asl.png"
                                     alt="ASL Logo"
                                     className="logo-img"
+                                    style={{
+                                        color: theme === 'dark' ? '#fff' : '#000000',
+
+
+                                    }}
                                     onError={(e) => {
                                         (e.target as HTMLImageElement).style.display = 'none';
                                         const fallback = (e.target as HTMLElement).nextElementSibling as HTMLElement;

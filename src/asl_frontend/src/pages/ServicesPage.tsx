@@ -138,7 +138,11 @@ const ServicesPage: React.FC = () => {
             {proposals.length > 0 ? (
                 <div className="space-y-4">
                     {proposals.map((proposal) => (
-                        <div key={proposal.id.toString()} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-blue-200 dark:border-blue-700">
+                        <div
+                            key={proposal.id.toString()}
+                            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-blue-200 dark:border-blue-700 cursor-pointer hover:shadow-xl transition-all duration-300 hover:border-blue-400 dark:hover:border-blue-500"
+                            onClick={() => navigate(`/proposals/${proposal.id.toString()}`)}
+                        >
                             <div className="flex items-start justify-between mb-4">
                                 <h4 className="font-bold text-blue-900 dark:text-blue-100">
                                     {proposal.title}
@@ -159,9 +163,12 @@ const ServicesPage: React.FC = () => {
                                     <span>👍 {proposal.votes_for.toString()}</span>
                                     <span>👎 {proposal.votes_against.toString()}</span>
                                 </div>
-                                <span className="text-xs text-blue-600 dark:text-blue-400">
-                                    {typeof proposal.proposal_type === 'string' ? proposal.proposal_type : 'Unknown'}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs text-blue-600 dark:text-blue-400">
+                                        {typeof proposal.proposal_type === 'string' ? proposal.proposal_type : 'Unknown'}
+                                    </span>
+                                    <span className="text-blue-400">→</span>
+                                </div>
                             </div>
                         </div>
                     ))}

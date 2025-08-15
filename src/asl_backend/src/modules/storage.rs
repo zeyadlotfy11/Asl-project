@@ -6,9 +6,10 @@ use std::cell::RefCell;
 
 use crate::modules::types::*;
 use crate::modules::ai_analysis::{AIAnalysisResult};
-use crate::modules::collaboration::{CollaborationRoom, Message, VirtualEvent};
-use crate::modules::analytics::{AnalyticsReport, PatternAnalysis};
-use crate::modules::gamification::{EnhancedNFT, UserProgress, Quest};
+// Commented out disabled modules
+// use crate::modules::collaboration::{CollaborationRoom, Message, VirtualEvent};
+// use crate::modules::analytics::{AnalyticsReport, PatternAnalysis};
+// use crate::modules::gamification::{EnhancedNFT, UserProgress, Quest};
 
 // ============================================================================
 // STORAGE TYPE DEFINITIONS
@@ -25,14 +26,15 @@ pub type AuditLogStore = StableBTreeMap<u64, AuditEntry, Memory>;
 
 // New amazing features storage
 pub type AIAnalysisStore = StableBTreeMap<u64, AIAnalysisResult, Memory>;
-pub type CollaborationRoomStore = StableBTreeMap<u64, CollaborationRoom, Memory>;
-pub type MessageStore = StableBTreeMap<u64, Message, Memory>;
-pub type VirtualEventStore = StableBTreeMap<u64, VirtualEvent, Memory>;
-pub type AnalyticsReportStore = StableBTreeMap<u64, AnalyticsReport, Memory>;
-pub type PatternAnalysisStore = StableBTreeMap<u64, PatternAnalysis, Memory>;
-pub type EnhancedNFTStore = StableBTreeMap<u64, EnhancedNFT, Memory>;
-pub type UserProgressStore = StableBTreeMap<Principal, UserProgress, Memory>;
-pub type QuestStore = StableBTreeMap<u64, Quest, Memory>;
+// Commented out disabled module storage types
+// pub type CollaborationRoomStore = StableBTreeMap<u64, CollaborationRoom, Memory>;
+// pub type MessageStore = StableBTreeMap<u64, Message, Memory>;
+// pub type VirtualEventStore = StableBTreeMap<u64, VirtualEvent, Memory>;
+// pub type AnalyticsReportStore = StableBTreeMap<u64, AnalyticsReport, Memory>;
+// pub type PatternAnalysisStore = StableBTreeMap<u64, PatternAnalysis, Memory>;
+// pub type EnhancedNFTStore = StableBTreeMap<u64, EnhancedNFT, Memory>;
+// pub type UserProgressStore = StableBTreeMap<Principal, UserProgress, Memory>;
+// pub type QuestStore = StableBTreeMap<u64, Quest, Memory>;
 
 // ============================================================================
 // STORABLE IMPLEMENTATIONS
@@ -203,53 +205,54 @@ thread_local! {
         )
     );
 
-    pub static COLLABORATION_ROOMS: RefCell<CollaborationRoomStore> = RefCell::new(
-        CollaborationRoomStore::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(8))),
-        )
-    );
+    // Commented out disabled module storage initialization
+    // pub static COLLABORATION_ROOMS: RefCell<CollaborationRoomStore> = RefCell::new(
+    //     CollaborationRoomStore::init(
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(8))),
+    //     )
+    // );
 
-    pub static MESSAGES: RefCell<MessageStore> = RefCell::new(
-        MessageStore::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(9))),
-        )
-    );
+    // pub static MESSAGES: RefCell<MessageStore> = RefCell::new(
+    //     MessageStore::init(
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(9))),
+    //     )
+    // );
 
-    pub static VIRTUAL_EVENTS: RefCell<VirtualEventStore> = RefCell::new(
-        VirtualEventStore::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(10))),
-        )
-    );
+    // pub static VIRTUAL_EVENTS: RefCell<VirtualEventStore> = RefCell::new(
+    //     VirtualEventStore::init(
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(10))),
+    //     )
+    // );
 
-    pub static ANALYTICS_REPORTS: RefCell<AnalyticsReportStore> = RefCell::new(
-        AnalyticsReportStore::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(11))),
-        )
-    );
+    // pub static ANALYTICS_REPORTS: RefCell<AnalyticsReportStore> = RefCell::new(
+    //     AnalyticsReportStore::init(
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(11))),
+    //     )
+    // );
 
-    pub static PATTERN_ANALYSES: RefCell<PatternAnalysisStore> = RefCell::new(
-        PatternAnalysisStore::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(12))),
-        )
-    );
+    // pub static PATTERN_ANALYSES: RefCell<PatternAnalysisStore> = RefCell::new(
+    //     PatternAnalysisStore::init(
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(12))),
+    //     )
+    // );
 
-    pub static ENHANCED_NFTS: RefCell<EnhancedNFTStore> = RefCell::new(
-        EnhancedNFTStore::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(13))),
-        )
-    );
+    // pub static ENHANCED_NFTS: RefCell<EnhancedNFTStore> = RefCell::new(
+    //     EnhancedNFTStore::init(
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(13))),
+    //     )
+    // );
 
-    pub static USER_PROGRESS: RefCell<UserProgressStore> = RefCell::new(
-        UserProgressStore::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(14))),
-        )
-    );
+    // pub static USER_PROGRESS: RefCell<UserProgressStore> = RefCell::new(
+    //     UserProgressStore::init(
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(14))),
+    //     )
+    // );
 
-    pub static QUESTS: RefCell<QuestStore> = RefCell::new(
-        QuestStore::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(15))),
-        )
-    );
+    // pub static QUESTS: RefCell<QuestStore> = RefCell::new(
+    //     QuestStore::init(
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(15))),
+    //     )
+    // );
 }
 
 // ============================================================================
@@ -282,98 +285,99 @@ impl Storable for AIAnalysisResult {
     }
 }
 
-impl Storable for CollaborationRoom {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// Commented out Storable implementations for disabled modules
+// impl Storable for CollaborationRoom {
+//     const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// 
+//     fn to_bytes(&self) -> Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
+// 
+//     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
+// }
 
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
+// impl Storable for Message {
+//     const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// 
+//     fn to_bytes(&self) -> Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
+// 
+//     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
+// }
 
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-}
+// impl Storable for VirtualEvent {
+//     const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// 
+//     fn to_bytes(&self) -> Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
+// 
+//     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
+// }
 
-impl Storable for Message {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// impl Storable for AnalyticsReport {
+//     const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// 
+//     fn to_bytes(&self) -> Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
+// 
+//     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
+// }
 
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
+// impl Storable for PatternAnalysis {
+//     const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// 
+//     fn to_bytes(&self) -> Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
+// 
+//     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
+// }
 
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-}
+// impl Storable for EnhancedNFT {
+//     const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// 
+//     fn to_bytes(&self) -> Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
+// 
+//     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
+// }
 
-impl Storable for VirtualEvent {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// impl Storable for UserProgress {
+//     const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// 
+//     fn to_bytes(&self) -> Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
+// 
+//     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
+// }
 
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-}
-
-impl Storable for AnalyticsReport {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
-
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-}
-
-impl Storable for PatternAnalysis {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
-
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-}
-
-impl Storable for EnhancedNFT {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
-
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-}
-
-impl Storable for UserProgress {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
-
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-}
-
-impl Storable for Quest {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
-
-    fn to_bytes(&self) -> Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-
-    fn from_bytes(bytes: Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-}
+// impl Storable for Quest {
+//     const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+// 
+//     fn to_bytes(&self) -> Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
+// 
+//     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
+// }

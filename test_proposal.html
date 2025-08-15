@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Proposal Backend</title>
+    <script type="module">
+        import { HttpAgent, Actor } from 'https://unpkg.com/@dfinity/agent@2.1.3/lib/esm/index.js';
+        import { Principal } from 'https://unpkg.com/@dfinity/principal@2.1.3/lib/esm/index.js';
+
+        // Your deployed canister ID
+        const canisterId = 'a4vk7-maaaa-aaaah-annta-cai';
+        
+        // Simplified IDL for testing
+        const idlFactory = ({ IDL }) => {
+            const ProposalStatus = IDL.Variant({
+                'Passed': IDL.Null,
+                'Active': IDL.Null,
+                'Rejected': IDL.Null,
+                'Executed': IDL.Null,
+            });
+            const ProposalType = IDL.Variant({
+                'VerifyArtifact': IDL.Null,
+                'GrantUserRole': IDL.Null,
+                'DisputeArtifact': IDL.Null,
+                'UpdateArtifactStatus': IDL.Null,
+            });
+            const Proposal = IDL.Record({
+                'id': IDL.Nat,
+                'status': ProposalStatus,
+                'title': IDL.Text,
+                'voting_deadline': IDL.Nat,
+                'artifact_id': IDL.Opt(IDL.Nat),
+                'description': IDL.Text,
+                'voters': IDL.Vec(IDL.Principal),
+                'created_at': IDL.Nat,
+                'proposer': IDL.Principal,
+                'votes_for': IDL.Float64,
+                'execution_payload': IDL.Opt(IDL.Text),
+                'proposal_type': ProposalType,
+                'votes_against': IDL.Float64,
+            });
+            const Result_3 = IDL.Variant({ 'Ok': Proposal, 'Err': IDL.Text });
+            
+            return IDL.Service({
+                'get_proposal_public': IDL.Func([IDL.Nat], [Result_3], ['query']),
+                'get_all_proposals_public': IDL.Func([], [IDL.Vec(IDL.Record({
+                    'id': IDL.Nat,
+                    'status': ProposalStatus,
+                    'title': IDL.Text,
+                    'voting_deadline': IDL.Nat,
+                    'description': IDL.Text,
+                    'created_at': IDL.Nat,
+                    'votes_for': IDL.Float64,
+                    'proposal_type': ProposalType,
+                    'votes_against': IDL.Float64,
+                }))], ['query']),
+            });
+        };
+
+        async function testProposals() {
+            try {
+                const agent = new HttpAgent({ host: 'https://icp0.io' });
+                const backend = Actor.createActor(idlFactory, {
+                    agent,
+                    canisterId,
+                });
+
+                console.log('Testing get_all_proposals_public...');
+                const allProposals = await backend.get_all_proposals_public();
+                console.log('All proposals:', allProposals);
+
+                if (allProposals.length > 0) {
+                    const firstProposalId = allProposals[0].id;
+                    console.log(`Testing get_proposal_public with ID: ${firstProposalId}...`);
+                    
+                    const singleProposal = await backend.get_proposal_public(firstProposalId);
+                    console.log('Single proposal result:', singleProposal);
+                    
+                    if (singleProposal.Ok) {
+                        console.log('Proposal fields:', Object.keys(singleProposal.Ok));
+                        console.log('Voters:', singleProposal.Ok.voters);
+                        console.log('Proposer:', singleProposal.Ok.proposer);
+                        console.log('Artifact ID:', singleProposal.Ok.artifact_id);
+                        console.log('Execution payload:', singleProposal.Ok.execution_payload);
+                    }
+                } else {
+                    console.log('No proposals found');
+                }
+            } catch (error) {
+                console.error('Test failed:', error);
+            }
+        }
+
+        // Run test when page loads
+        window.addEventListener('load', testProposals);
+    </script>
+</head>
+<body>
+    <h1>Proposal Backend Test</h1>
+    <p>Check the browser console for test results.</p>
+</body>
+</html>

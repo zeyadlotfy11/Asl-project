@@ -1,5 +1,5 @@
 use ic_cdk::{query, update};
-use candid::{CandidType, Principal};
+use candid::CandidType;
 use serde::{Deserialize, Serialize};
 use crate::modules::types::*;
 use crate::modules::storage::{AI_ANALYSES, get_next_id};

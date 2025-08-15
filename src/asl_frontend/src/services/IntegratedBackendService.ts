@@ -145,6 +145,7 @@ export type {
 function handleResult<T>(result: any): T | null {
   if (result && typeof result === "object") {
     if ("Ok" in result) {
+      console.log("Result.Ok:", result.Ok);
       return result.Ok;
     }
     if ("Err" in result) {
@@ -153,6 +154,47 @@ function handleResult<T>(result: any): T | null {
     }
   }
   return (result as T) || null;
+}
+
+// Helper function to ensure proposal has all required fields
+function validateProposal(proposal: any): Proposal | null {
+  if (!proposal || typeof proposal !== "object") {
+    console.error("Invalid proposal object:", proposal);
+    return null;
+  }
+
+  console.log("Validating proposal object keys:", Object.keys(proposal));
+
+  // Convert any potential type mismatches
+  const validatedProposal: any = {
+    id: proposal.id || BigInt(0),
+    status: proposal.status || { Active: null },
+    title: proposal.title || "",
+    voting_deadline: proposal.voting_deadline || BigInt(0),
+    description: proposal.description || "",
+    created_at: proposal.created_at || BigInt(0),
+    votes_for:
+      typeof proposal.votes_for === "number"
+        ? proposal.votes_for
+        : Number(proposal.votes_for || 0),
+    votes_against:
+      typeof proposal.votes_against === "number"
+        ? proposal.votes_against
+        : Number(proposal.votes_against || 0),
+    proposal_type: proposal.proposal_type || { VerifyArtifact: null },
+    // Handle proposal-specific fields with proper defaults
+    voters: Array.isArray(proposal.voters) ? proposal.voters : [],
+    proposer: proposal.proposer || Principal.anonymous(),
+    artifact_id: Array.isArray(proposal.artifact_id)
+      ? proposal.artifact_id
+      : [],
+    execution_payload: Array.isArray(proposal.execution_payload)
+      ? proposal.execution_payload
+      : [],
+  };
+
+  console.log("Validated proposal with required fields:", validatedProposal);
+  return validatedProposal as Proposal;
 }
 
 // Helper function to handle optional Result types
@@ -408,12 +450,120 @@ export class BackendService {
     }
   }
 
-  static async getProposal(id: bigint): Promise<Proposal | null> {
+  static async getProposalSafe(id: number): Promise<Proposal | null> {
     try {
-      const result = await originalBackend.get_proposal_public(id);
-      return handleResult<Proposal>(result);
+      console.log("Using safe proposal fetching for ID:", id);
+
+      // Get proposal from the working all proposals list
+      const allProposals = await BackendService.getAllProposals();
+      const proposalResponse = allProposals.find((p) => Number(p.id) === id);
+
+      if (!proposalResponse) {
+        console.error("Proposal not found in all proposals list");
+        return null;
+      }
+
+      console.log("Found proposal in all proposals:", proposalResponse);
+
+      // Convert ProposalResponse to full Proposal with reasonable defaults
+      const safeProposal: Proposal = {
+        id: proposalResponse.id,
+        status: proposalResponse.status,
+        title: proposalResponse.title,
+        voting_deadline: proposalResponse.voting_deadline,
+        description: proposalResponse.description,
+        created_at: proposalResponse.created_at,
+        votes_for: proposalResponse.votes_for,
+        votes_against: proposalResponse.votes_against,
+        proposal_type: proposalResponse.proposal_type,
+        // Add missing fields with defaults
+        voters: [], // We'll populate this if we can get vote details
+        proposer: Principal.anonymous(), // Default, could be enhanced later
+        artifact_id: [], // Default empty, could be inferred from proposal type
+        execution_payload: [], // Default empty
+      };
+
+      // Try to get additional details if possible
+      try {
+        const votes = await BackendService.getVoteDetails(id);
+        if (votes && votes.length > 0) {
+          safeProposal.voters = votes.map((v) => v.voter);
+        }
+      } catch (voteError) {
+        console.warn("Could not get vote details:", voteError);
+      }
+
+      console.log("Safe proposal constructed:", safeProposal);
+      return safeProposal;
+    } catch (error) {
+      console.error("Safe proposal fetching failed:", error);
+      return null;
+    }
+  }
+
+  static async getProposal(id: number): Promise<Proposal | null> {
+    try {
+      console.log("Fetching proposal with ID:", id);
+      const result = await originalBackend.get_proposal_public(BigInt(id));
+      console.log("Raw backend result:", result);
+      console.log("Result type:", typeof result);
+      console.log("Result keys:", result ? Object.keys(result) : "null");
+
+      if (!result) {
+        console.error("No result returned from backend");
+        return null;
+      }
+
+      if (typeof result === "object" && "Err" in result) {
+        console.error("Backend returned error:", result.Err);
+        throw new Error(result.Err);
+      }
+
+      if (typeof result === "object" && "Ok" in result) {
+        console.log("Backend returned Ok result:", result.Ok);
+        console.log("Ok result type:", typeof result.Ok);
+        console.log(
+          "Ok result keys:",
+          result.Ok ? Object.keys(result.Ok) : "null"
+        );
+
+        const validatedProposal = validateProposal(result.Ok);
+        console.log("Final validated proposal:", validatedProposal);
+        return validatedProposal;
+      }
+
+      // Handle case where result might be the proposal directly
+      console.log("Handling direct proposal result");
+      const validatedProposal = validateProposal(result);
+      return validatedProposal;
     } catch (error) {
       console.error("Failed to get proposal:", error);
+      console.error(
+        "Error stack:",
+        error instanceof Error ? error.stack : "No stack"
+      );
+
+      // Fallback: Try to get proposal from all proposals list
+      console.log("Trying fallback: getting proposal from all proposals list");
+      try {
+        const allProposals = await BackendService.getAllProposals();
+        const fallbackProposal = allProposals.find((p) => Number(p.id) === id);
+        if (fallbackProposal) {
+          console.log("Found proposal in fallback:", fallbackProposal);
+          // Convert ProposalResponse to Proposal format
+          const convertedProposal: Proposal = {
+            ...fallbackProposal,
+            voters: [], // Default empty array since this info isn't in ProposalResponse
+            proposer: Principal.anonymous(), // Default since this info isn't available
+            artifact_id: [], // Default empty array
+            execution_payload: [], // Default empty array
+          };
+          return convertedProposal;
+        }
+      } catch (fallbackError) {
+        console.error("Fallback also failed:", fallbackError);
+      }
+
       return null;
     }
   }
@@ -448,14 +598,15 @@ export class BackendService {
   }
 
   static async voteOnProposal(
-    proposalId: bigint,
-    voteType: VoteType,
+    proposalId: number,
+    voteType: "For" | "Against" | "Abstain",
     rationale?: string
   ): Promise<string> {
     try {
+      const vote = { [voteType]: null };
       const result = await originalBackend.vote_on_proposal_public(
-        proposalId,
-        voteType,
+        BigInt(proposalId),
+        vote as VoteType,
         rationale ? [rationale] : []
       );
       return handleResult<string>(result) || "success";
@@ -483,9 +634,11 @@ export class BackendService {
     }
   }
 
-  static async getVoteDetails(proposalId: bigint): Promise<Vote[]> {
+  static async getVoteDetails(proposalId: number): Promise<Vote[]> {
     try {
-      const result = await originalBackend.get_vote_details_public(proposalId);
+      const result = await originalBackend.get_vote_details_public(
+        BigInt(proposalId)
+      );
       return handleResult<Vote[]>(result) || [];
     } catch (error) {
       console.error("Failed to get vote details:", error);
@@ -494,24 +647,26 @@ export class BackendService {
   }
 
   static async addCommentToProposal(
-    proposalId: bigint,
+    proposalId: number,
     comment: string
-  ): Promise<bigint> {
+  ): Promise<number> {
     try {
       const result = await originalBackend.add_comment_to_proposal_public(
-        proposalId,
+        BigInt(proposalId),
         comment
       );
-      return handleResult<bigint>(result) || BigInt(0);
+      return Number(handleResult<bigint>(result) || BigInt(0));
     } catch (error) {
       console.error("Failed to add comment to proposal:", error);
       throw error;
     }
   }
 
-  static async executeProposal(proposalId: bigint): Promise<string> {
+  static async executeProposal(proposalId: number): Promise<string> {
     try {
-      const result = await originalBackend.execute_proposal_public(proposalId);
+      const result = await originalBackend.execute_proposal_public(
+        BigInt(proposalId)
+      );
       return handleResult<string>(result) || "success";
     } catch (error) {
       console.error("Failed to execute proposal:", error);
@@ -1213,6 +1368,7 @@ export const {
   // Proposal Management
   createProposal,
   getProposal,
+  getProposalSafe,
   getAllProposals,
   getActiveProposals,
   getProposalsByStatus,

@@ -14,6 +14,7 @@ import { Toaster } from 'react-hot-toast';
 import Dashboard from './components/Dashboard';
 import CreateArtifactPage from './pages/CreateArtifactPage';
 import CreateProposalPage from './pages/CreateProposalPage';
+import ProposalDetailsPage from './pages/ProposalDetailsPage';
 function App() {
   return (
     <BrowserRouter>
@@ -42,6 +43,7 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="create-artifact" element={<CreateArtifactPage />} />
                 <Route path="create-proposal" element={<CreateProposalPage />} />
+                <Route path="proposals/:id" element={<ProposalDetailsPage />} />
               </Route>
             </Routes>
           </AuthProvider>

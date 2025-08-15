@@ -11,6 +11,7 @@ pub mod utils;
 
 // Amazing new features modules
 pub mod ai_analysis;
-pub mod collaboration;
-pub mod analytics;
-pub mod gamification;
+// Commented out to reduce canister size
+// pub mod collaboration;
+// pub mod analytics;
+// pub mod gamification;

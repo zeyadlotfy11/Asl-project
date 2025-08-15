@@ -3,7 +3,7 @@ use candid::{CandidType, Principal};
 use ic_cdk::{query, update, init, pre_upgrade, post_upgrade};
 use serde::{Deserialize, Serialize};
 
-// Modular Architecture
+// Modular Architecture - Simplified for size optimization
 mod modules;
 use modules::types::*;
 use modules::storage::*;
@@ -11,18 +11,23 @@ use modules::auth::*;
 use modules::utils::*;
 use modules::audit::log_audit_event;
 
-use modules::ai_analysis::AIAnalysisResult;
-use modules::collaboration::{CollaborationRoom, Message, VirtualEvent};
-use modules::analytics::{AnalyticsReport, PatternAnalysis};
-use modules::gamification::{EnhancedNFT, UserProgress, Quest};
+use modules::ai_analysis::{
+    AIAnalysisResult, add_provenance_entry, get_provenance_chain, verify_provenance_integrity,
+    analyze_artifact_with_ai, get_ai_analysis, get_similar_artifacts
+};
+// Commented out complex modules to reduce size
+// use modules::collaboration::{CollaborationRoom, Message, VirtualEvent};
+// use modules::analytics::{AnalyticsReport, PatternAnalysis};
+// use modules::gamification::{EnhancedNFT, UserProgress, Quest};
 
 use modules::artifacts::{
-    create_artifact, update_artifact_metadata, add_artifact_image, update_artifact_status,
+    create_artifact, update_artifact_status,
     get_artifact, get_all_artifacts, get_artifacts_by_status, get_artifacts_by_creator, search_artifacts
 };
 use modules::dao::{
-    create_proposal, execute_proposal, add_comment_to_proposal,
-    get_proposal, get_all_proposals, get_active_proposals, get_proposals_by_status
+    create_proposal, execute_proposal,
+    get_proposal, get_all_proposals, get_active_proposals, get_proposals_by_status,
+    add_comment_to_proposal
 };
 use modules::voting::{vote_on_proposal, get_vote_details, change_vote};
 use modules::nft::{
@@ -30,21 +35,20 @@ use modules::nft::{
     get_nft, get_nft_by_artifact, get_nfts_by_owner, get_all_nfts
 };
 
-use modules::ai_analysis::{
-    analyze_artifact_with_ai, get_ai_analysis, get_similar_artifacts, add_provenance_entry, 
-    get_provenance_chain, verify_provenance_integrity
-};
-use modules::collaboration::{
-    create_collaboration_room, send_message, add_reaction, get_collaboration_rooms,
-    get_room_messages, create_virtual_event, join_event, get_upcoming_events
-};
-use modules::analytics::{
-    generate_analytics_report, get_analytics_report, get_pattern_analysis
-};
-use modules::gamification::{
-    award_achievement, create_quest, join_quest, get_user_progress,
-    get_leaderboard, get_active_quests, get_enhanced_nft, get_user_nfts
-};
+// Additional AI analysis functions already imported above
+
+// Commented out complex functionality to reduce size
+// use modules::collaboration::{
+//     create_collaboration_room, send_message, add_reaction, get_collaboration_rooms,
+//     get_room_messages, create_virtual_event, join_event, get_upcoming_events
+// };
+// use modules::analytics::{
+//     generate_analytics_report, get_analytics_report, get_pattern_analysis
+// };
+// use modules::gamification::{
+//     award_achievement, create_quest, join_quest, get_user_progress,
+//     get_leaderboard, get_active_quests, get_enhanced_nft, get_user_nfts
+// };
 
 // ============================================================================
 // USER MANAGEMENT SYSTEM
@@ -190,173 +194,173 @@ fn verify_provenance_integrity_public(artifact_id: u64) -> Result<bool, String> 
 }
 
 // ============================================================================
-// COLLABORATION AMAZING FEATURES
+// COLLABORATION FEATURES - COMMENTED OUT TO REDUCE CANISTER SIZE
 // ============================================================================
 
-#[update]
-fn create_collaboration_room_public(
-    title: String,
-    description: String,
-    artifact_id: Option<u64>,
-    is_private: bool,
-) -> Result<u64, String> {
-    // Use available enum variants
-    create_collaboration_room(
-        modules::collaboration::RoomType::ArtifactDiscussion,
-        title,
-        description,
-        artifact_id,
-        None, // proposal_id
-        is_private,
-        modules::collaboration::AccessLevel::Public
-    )
-}
+// #[update]
+// fn create_collaboration_room_public(
+//     title: String,
+//     description: String,
+//     artifact_id: Option<u64>,
+//     is_private: bool,
+// ) -> Result<u64, String> {
+//     // Use available enum variants
+//     create_collaboration_room(
+//         modules::collaboration::RoomType::ArtifactDiscussion,
+//         title,
+//         description,
+//         artifact_id,
+//         None, // proposal_id
+//         is_private,
+//         modules::collaboration::AccessLevel::Public
+//     )
+// }
 
-#[update]
-fn send_message_public(
-    room_id: u64,
-    content: String,
-    reply_to: Option<u64>,
-) -> Result<u64, String> {
-    send_message(
-        room_id,
-        content,
-        modules::collaboration::MessageType::Text,
-        reply_to,
-        Vec::new() // empty attachments
-    )
-}
+// #[update]
+// fn send_message_public(
+//     room_id: u64,
+//     content: String,
+//     reply_to: Option<u64>,
+// ) -> Result<u64, String> {
+//     send_message(
+//         room_id,
+//         content,
+//         modules::collaboration::MessageType::Text,
+//         reply_to,
+//         Vec::new() // empty attachments
+//     )
+// }
 
-#[update]
-fn add_reaction_public(message_id: u64, emoji: String) -> Result<String, String> {
-    add_reaction(message_id, emoji)
-}
+// #[update]
+// fn add_reaction_public(message_id: u64, emoji: String) -> Result<String, String> {
+//     add_reaction(message_id, emoji)
+// }
 
-#[update]
-fn create_virtual_event_public(
-    title: String,
-    description: String,
-    start_time: u64,
-    duration_minutes: u32,
-) -> Result<u64, String> {
-    create_virtual_event(
-        title,
-        description,
-        modules::collaboration::EventType::PanelDiscussion,
-        start_time,
-        start_time + (duration_minutes as u64 * 60), // convert duration to end_time
-        None // artifact_focus
-    )
-}
+// #[update]
+// fn create_virtual_event_public(
+//     title: String,
+//     description: String,
+//     start_time: u64,
+//     duration_minutes: u32,
+// ) -> Result<u64, String> {
+//     create_virtual_event(
+//         title,
+//         description,
+//         modules::collaboration::EventType::PanelDiscussion,
+//         start_time,
+//         start_time + (duration_minutes as u64 * 60), // convert duration to end_time
+//         None // artifact_focus
+//     )
+// }
 
-#[update]
-fn join_event_public(event_id: u64) -> Result<String, String> {
-    join_event(event_id)
-}
+// #[update]
+// fn join_event_public(event_id: u64) -> Result<String, String> {
+//     join_event(event_id)
+// }
 
-#[query]
-fn get_collaboration_rooms_public() -> Vec<CollaborationRoom> {
-    get_collaboration_rooms()
-}
+// #[query]
+// fn get_collaboration_rooms_public() -> Vec<CollaborationRoom> {
+//     get_collaboration_rooms()
+// }
 
-#[query]
-fn get_room_messages_public(room_id: u64, limit: Option<usize>) -> Vec<Message> {
-    get_room_messages(room_id, limit)
-}
+// #[query]
+// fn get_room_messages_public(room_id: u64, limit: Option<usize>) -> Vec<Message> {
+//     get_room_messages(room_id, limit)
+// }
 
-#[query]
-fn get_upcoming_events_public() -> Vec<VirtualEvent> {
-    get_upcoming_events()
-}
-
-// ============================================================================
-// ANALYTICS AMAZING FEATURES
-// ============================================================================
-
-#[update]
-fn generate_analytics_report_public(
-    report_type: String,
-    start_time: Option<u64>,
-    end_time: Option<u64>,
-) -> Result<u64, String> {
-    // Use available enum variants
-    let r_type = modules::analytics::ReportType::UserEngagement;
-    generate_analytics_report(r_type, start_time, end_time)
-}
-
-#[query]
-fn get_analytics_report_public(report_id: u64) -> Result<AnalyticsReport, String> {
-    get_analytics_report(report_id)
-}
-
-#[query]
-fn get_pattern_analysis_public() -> Vec<PatternAnalysis> {
-    get_pattern_analysis()
-}
+// #[query]
+// fn get_upcoming_events_public() -> Vec<VirtualEvent> {
+//     get_upcoming_events()
+// }
 
 // ============================================================================
-// GAMIFICATION AMAZING FEATURES
+// ANALYTICS FEATURES - COMMENTED OUT TO REDUCE CANISTER SIZE
 // ============================================================================
 
-#[update]
-fn mint_enhanced_nft_public(
-    artifact_id: u64,
-) -> Result<u64, String> {
-    // Simplified enhanced NFT minting - use existing NFT system
-    issue_heritage_nft(artifact_id)
-}
+// #[update]
+// fn generate_analytics_report_public(
+//     report_type: String,
+//     start_time: Option<u64>,
+//     end_time: Option<u64>,
+// ) -> Result<u64, String> {
+//     // Use available enum variants
+//     let r_type = modules::analytics::ReportType::UserEngagement;
+//     generate_analytics_report(r_type, start_time, end_time)
+// }
 
-#[update]
-fn award_achievement_public(user: Principal, achievement_title: String, progress: f64) -> Result<String, String> {
-    award_achievement(user, achievement_title, progress)
-}
+// #[query]
+// fn get_analytics_report_public(report_id: u64) -> Result<AnalyticsReport, String> {
+//     get_analytics_report(report_id)
+// }
 
-#[update]
-fn create_quest_public(
-    title: String,
-    description: String,
-    duration_days: u32,
-) -> Result<u64, String> {
-    // Simplified quest creation using available enum variants
-    create_quest(
-        title,
-        description,
-        Vec::new(), // objectives
-        Vec::new(), // rewards  
-        duration_days as u64,
-        modules::gamification::QuestType::Educational,
-    )
-}
+// #[query]
+// fn get_pattern_analysis_public() -> Vec<PatternAnalysis> {
+//     get_pattern_analysis()
+// }
 
-#[update]
-fn join_quest_public(quest_id: u64) -> Result<String, String> {
-    join_quest(quest_id)
-}
+// ============================================================================
+// GAMIFICATION FEATURES - COMMENTED OUT TO REDUCE CANISTER SIZE
+// ============================================================================
 
-#[query]
-fn get_user_progress_public(user: Principal) -> Option<UserProgress> {
-    get_user_progress(user)
-}
+// #[update]
+// fn mint_enhanced_nft_public(
+//     artifact_id: u64,
+// ) -> Result<u64, String> {
+//     // Simplified enhanced NFT minting - use existing NFT system
+//     issue_heritage_nft(artifact_id)
+// }
 
-#[query]
-fn get_leaderboard_public(limit: usize) -> Vec<(Principal, u64)> {
-    get_leaderboard(limit)
-}
+// #[update]
+// fn award_achievement_public(user: Principal, achievement_title: String, progress: f64) -> Result<String, String> {
+//     award_achievement(user, achievement_title, progress)
+// }
 
-#[query]
-fn get_active_quests_public() -> Vec<Quest> {
-    get_active_quests()
-}
+// #[update]
+// fn create_quest_public(
+//     title: String,
+//     description: String,
+//     duration_days: u32,
+// ) -> Result<u64, String> {
+//     // Simplified quest creation using available enum variants
+//     create_quest(
+//         title,
+//         description,
+//         Vec::new(), // objectives
+//         Vec::new(), // rewards  
+//         duration_days as u64,
+//         modules::gamification::QuestType::Educational,
+//     )
+// }
 
-#[query]
-fn get_enhanced_nft_public(token_id: u64) -> Option<EnhancedNFT> {
-    get_enhanced_nft(token_id)
-}
+// #[update]
+// fn join_quest_public(quest_id: u64) -> Result<String, String> {
+//     join_quest(quest_id)
+// }
 
-#[query]
-fn get_user_nfts_public(user: Principal) -> Vec<EnhancedNFT> {
-    get_user_nfts(user)
-}
+// #[query]
+// fn get_user_progress_public(user: Principal) -> Option<UserProgress> {
+//     get_user_progress(user)
+// }
+
+// #[query]
+// fn get_leaderboard_public(limit: usize) -> Vec<(Principal, u64)> {
+//     get_leaderboard(limit)
+// }
+
+// #[query]
+// fn get_active_quests_public() -> Vec<Quest> {
+//     get_active_quests()
+// }
+
+// #[query]
+// fn get_enhanced_nft_public(token_id: u64) -> Option<EnhancedNFT> {
+//     get_enhanced_nft(token_id)
+// }
+
+// #[query]
+// fn get_user_nfts_public(user: Principal) -> Vec<EnhancedNFT> {
+//     get_user_nfts(user)
+// }
 
 // ============================================================================
 // VOTING SYSTEM FEATURES

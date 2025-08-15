@@ -6,11 +6,13 @@ import type {
     Artifact,
     ProposalResponse,
     HeritageNFT,
-    SystemStats
+    SystemStats,
+    AIAnalysisResult
 } from '../services/IntegratedBackendService';
 import { Principal } from '@dfinity/principal';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import AIAnalysisModal from './AIAnalysisModal';
 
 interface DashboardStats {
     totalArtifacts: number;
@@ -50,6 +52,10 @@ const Dashboard: React.FC = () => {
     const [recentArtifacts, setRecentArtifacts] = useState<Artifact[]>([]);
     const [activeProposals, setActiveProposals] = useState<ProposalResponse[]>([]);
     const [userNFTs, setUserNFTs] = useState<HeritageNFT[]>([]);
+    const [aiAnalysisLoading, setAiAnalysisLoading] = useState(false);
+    const [selectedArtifactForAnalysis, setSelectedArtifactForAnalysis] = useState<Artifact | null>(null);
+    const [aiAnalysisResult, setAiAnalysisResult] = useState<AIAnalysisResult | null>(null);
+    const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
     // Load dashboard data
     useEffect(() => {
@@ -109,8 +115,8 @@ const Dashboard: React.FC = () => {
     // Handle proposal voting
     const handleVoteOnProposal = async (proposalId: bigint, support: boolean) => {
         try {
-            const voteType = support ? { For: null } : { Against: null };
-            await BackendService.voteOnProposal(proposalId, voteType);
+            const voteType: "For" | "Against" = support ? "For" : "Against";
+            await BackendService.voteOnProposal(Number(proposalId), voteType);
             toast.success('Vote submitted successfully');
             loadDashboardData(); // Refresh data
         } catch (error) {
@@ -129,6 +135,61 @@ const Dashboard: React.FC = () => {
             toast.error('Failed to mint NFT');
             console.error(error);
         }
+    };
+
+    // Handle AI Analysis
+    const handleAIAnalysis = async (artifact?: Artifact) => {
+        if (!artifact && recentArtifacts.length === 0) {
+            toast.error('No artifacts available for analysis');
+            return;
+        }
+
+        const artifactToAnalyze = artifact || recentArtifacts[0];
+        setSelectedArtifactForAnalysis(artifactToAnalyze);
+        setAiAnalysisLoading(true);
+
+        try {
+            toast.loading('Starting AI analysis... This may take a moment.');
+
+            // First try to get existing analysis
+            let analysis = await BackendService.getAIAnalysis(artifactToAnalyze.id);
+
+            // If no existing analysis, perform new analysis
+            if (!analysis) {
+                analysis = await BackendService.analyzeArtifactWithAI(artifactToAnalyze.id);
+            }
+
+            if (analysis) {
+                setAiAnalysisResult(analysis);
+                setShowAnalysisModal(true);
+                toast.success('AI analysis completed successfully!');
+            } else {
+                toast.error('AI analysis failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('AI Analysis error:', error);
+            toast.error('Failed to perform AI analysis');
+        } finally {
+            setAiAnalysisLoading(false);
+        }
+    };
+
+    const getRiskLevelColor = (riskLevel: any): string => {
+        if (!riskLevel || typeof riskLevel !== 'object') return 'text-gray-500';
+        const level = Object.keys(riskLevel)[0];
+        switch (level) {
+            case 'VeryLow': return 'text-green-600';
+            case 'Low': return 'text-green-500';
+            case 'Medium': return 'text-yellow-500';
+            case 'High': return 'text-orange-500';
+            case 'Critical': return 'text-red-500';
+            default: return 'text-gray-500';
+        }
+    };
+
+    const getRiskLevelText = (riskLevel: any): string => {
+        if (!riskLevel || typeof riskLevel !== 'object') return 'Unknown';
+        return Object.keys(riskLevel)[0] || 'Unknown';
     };
 
     if (!isAuthenticated) {
@@ -231,12 +292,21 @@ const Dashboard: React.FC = () => {
                                             Status: {getArtifactStatusText(artifact.status)}
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={() => handleMintNFT(artifact.id)}
-                                        className="px-3 py-1 bg-amber-600 text-white rounded-lg text-sm hover:bg-amber-700 transition-colors"
-                                    >
-                                        Mint NFT
-                                    </button>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => handleMintNFT(artifact.id)}
+                                            className="px-3 py-1 bg-amber-600 text-white rounded-lg text-sm hover:bg-amber-700 transition-colors"
+                                        >
+                                            Mint NFT
+                                        </button>
+                                        <button
+                                            onClick={() => handleAIAnalysis(artifact)}
+                                            disabled={aiAnalysisLoading}
+                                            className="px-3 py-1 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700 transition-colors disabled:opacity-50"
+                                        >
+                                            {aiAnalysisLoading ? '🔄' : '🔍'} AI Analysis
+                                        </button>
+                                    </div>
                                 </div>
                             )) : (
                                 <div className="text-center text-amber-600 dark:text-amber-400 py-8">
@@ -253,22 +323,34 @@ const Dashboard: React.FC = () => {
                         </h2>
                         <div className="space-y-3">
                             {activeProposals.length > 0 ? activeProposals.map((proposal, index) => (
-                                <div key={index} className="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
-                                    <div className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                                        {proposal.title}
-                                    </div>
-                                    <div className="text-sm text-blue-600 dark:text-blue-400 mb-3">
-                                        Type: {getProposalTypeText(proposal.proposal_type)}
-                                    </div>
+                                <div key={index} className="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-600 transition-colors">
+                                    <Link
+                                        to={`/proposals/${proposal.id.toString()}`}
+                                        className="block group"
+                                    >
+                                        <div className="font-medium text-blue-900 dark:text-blue-100 mb-2 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors flex items-center justify-between">
+                                            <span>{proposal.title}</span>
+                                            <span className="text-blue-400 group-hover:text-blue-600 text-sm">→</span>
+                                        </div>
+                                        <div className="text-sm text-blue-600 dark:text-blue-400 mb-3">
+                                            Type: {getProposalTypeText(proposal.proposal_type)}
+                                        </div>
+                                    </Link>
                                     <div className="flex gap-2">
                                         <button
-                                            onClick={() => handleVoteOnProposal(proposal.id, true)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleVoteOnProposal(proposal.id, true);
+                                            }}
                                             className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors"
                                         >
                                             Vote For
                                         </button>
                                         <button
-                                            onClick={() => handleVoteOnProposal(proposal.id, false)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleVoteOnProposal(proposal.id, false);
+                                            }}
                                             className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors"
                                         >
                                             Vote Against
@@ -326,12 +408,21 @@ const Dashboard: React.FC = () => {
                         </button> </Link>
 
                     <button
-                        onClick={() => toast.success('AI Analysis coming soon!')}
-                        className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-4 rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all duration-300 font-semibold"
+                        onClick={() => handleAIAnalysis()}
+                        disabled={aiAnalysisLoading || recentArtifacts.length === 0}
+                        className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-4 rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all duration-300 font-semibold disabled:opacity-50"
                     >
-                        🔍 AI Analysis
+                        {aiAnalysisLoading ? '🔄 Analyzing...' : '🔍 AI Analysis'}
                     </button>
                 </div>
+
+                {/* AI Analysis Modal */}
+                <AIAnalysisModal
+                    isOpen={showAnalysisModal}
+                    onClose={() => setShowAnalysisModal(false)}
+                    artifact={selectedArtifactForAnalysis}
+                    analysisResult={aiAnalysisResult}
+                />
             </div>
         </div>
     );
