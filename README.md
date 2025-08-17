@@ -12,8 +12,6 @@
 [![React](https://img.shields.io/badge/Frontend-React%20TypeScript-blue)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Build-Vite-purple)](https://vitejs.dev/)
 
-[📖 Documentation](#documentation) | [🚀 Quick Start](#quick-start) | [🏗️ Architecture](#architecture)
-
 </div>
 
 ## 📖 Introduction
