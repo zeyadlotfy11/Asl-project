@@ -26,6 +26,8 @@ pub type AuditLogStore = StableBTreeMap<u64, AuditEntry, Memory>;
 
 // New amazing features storage
 pub type AIAnalysisStore = StableBTreeMap<u64, AIAnalysisResult, Memory>;
+pub type CommunityPostStore = StableBTreeMap<u64, crate::modules::community::CommunityPost, Memory>;
+pub type CommunityStatsStore = RefCell<crate::modules::community::CommunityStats>;
 // Commented out disabled module storage types
 // pub type CollaborationRoomStore = StableBTreeMap<u64, CollaborationRoom, Memory>;
 // pub type MessageStore = StableBTreeMap<u64, Message, Memory>;
@@ -144,6 +146,18 @@ impl Storable for AuditEntry {
     }
 }
 
+impl Storable for crate::modules::community::CommunityPost {
+    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+}
+
 // ============================================================================
 // GLOBAL STATE MANAGEMENT
 // ============================================================================
@@ -205,46 +219,65 @@ thread_local! {
         )
     );
 
+    pub static COMMUNITY_POSTS: RefCell<CommunityPostStore> = RefCell::new(
+        CommunityPostStore::init(
+            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(8))),
+        )
+    );
+
+    pub static COMMUNITY_STATS: CommunityStatsStore = RefCell::new(
+        crate::modules::community::CommunityStats {
+            total_members: 0,
+            active_today: 0,
+            active_this_week: 0,
+            total_posts: 0,
+            total_replies: 0,
+            posts_today: 0,
+            featured_posts: 0,
+            last_updated: 0,
+        }
+    );
+
     // Commented out disabled module storage initialization
     // pub static COLLABORATION_ROOMS: RefCell<CollaborationRoomStore> = RefCell::new(
     //     CollaborationRoomStore::init(
-    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(8))),
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(9))),
     //     )
     // );
 
     // pub static MESSAGES: RefCell<MessageStore> = RefCell::new(
     //     MessageStore::init(
-    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(9))),
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(10))),
     //     )
     // );
 
     // pub static VIRTUAL_EVENTS: RefCell<VirtualEventStore> = RefCell::new(
     //     VirtualEventStore::init(
-    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(10))),
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(11))),
     //     )
     // );
 
     // pub static ANALYTICS_REPORTS: RefCell<AnalyticsReportStore> = RefCell::new(
     //     AnalyticsReportStore::init(
-    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(11))),
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(12))),
     //     )
     // );
 
     // pub static PATTERN_ANALYSES: RefCell<PatternAnalysisStore> = RefCell::new(
     //     PatternAnalysisStore::init(
-    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(12))),
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(13))),
     //     )
     // );
 
     // pub static ENHANCED_NFTS: RefCell<EnhancedNFTStore> = RefCell::new(
     //     EnhancedNFTStore::init(
-    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(13))),
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(14))),
     //     )
     // );
 
     // pub static USER_PROGRESS: RefCell<UserProgressStore> = RefCell::new(
     //     UserProgressStore::init(
-    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(14))),
+    //         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(15))),
     //     )
     // );
 

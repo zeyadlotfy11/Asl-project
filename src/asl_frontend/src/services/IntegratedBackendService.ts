@@ -931,6 +931,179 @@ export class BackendService {
     }
   }
 
+  // ========== COMMUNITY MANAGEMENT ==========
+
+  static async getCommunityStats(): Promise<{
+    totalMembers: number;
+    activeToday: number;
+    totalPosts: number;
+    totalArtifacts: number;
+  }> {
+    try {
+      const backend = getAslBackend();
+      if (!backend) throw new Error("Backend not available");
+
+      // For now, return mock data. In a real implementation, this would call backend methods
+      return {
+        totalMembers: 1247,
+        activeToday: 89,
+        totalPosts: 342,
+        totalArtifacts: 156,
+      };
+    } catch (error) {
+      console.error("Failed to get community stats:", error);
+      return {
+        totalMembers: 0,
+        activeToday: 0,
+        totalPosts: 0,
+        totalArtifacts: 0,
+      };
+    }
+  }
+
+  static async getCommunityPosts(): Promise<
+    Array<{
+      id: number;
+      author: string;
+      title: string;
+      content: string;
+      category: "general" | "artifacts" | "research" | "events";
+      timestamp: number;
+      likes: number;
+      replies: number;
+      tags: string[];
+    }>
+  > {
+    try {
+      // For now, return mock data. In a real implementation, this would call backend methods
+      return [
+        {
+          id: 1,
+          author: "Dr. Sarah Ahmed",
+          title: "New Ancient Egyptian Pottery Discovery",
+          content:
+            "We've uncovered fascinating pottery fragments that may date back to the Old Kingdom. The craftsmanship shows remarkable similarity to pieces found in the Valley of the Kings.",
+          category: "artifacts",
+          timestamp: Date.now() - 3600000,
+          likes: 24,
+          replies: 8,
+          tags: ["pottery", "old-kingdom", "archaeology"],
+        },
+        {
+          id: 2,
+          author: "Cultural Heritage Institute",
+          title: "Upcoming Digital Preservation Workshop",
+          content:
+            "Join us for a comprehensive workshop on digital preservation techniques for ancient artifacts. We'll cover 3D scanning, digital archiving, and blockchain authentication.",
+          category: "events",
+          timestamp: Date.now() - 7200000,
+          likes: 31,
+          replies: 12,
+          tags: ["workshop", "digital-preservation", "3d-scanning"],
+        },
+        {
+          id: 3,
+          author: "Prof. Mohamed Hassan",
+          title: "Research Collaboration Opportunity",
+          content:
+            "Looking for research partners to study hieroglyphic inscriptions from the Ptolemaic period. Our team has access to advanced imaging technology.",
+          category: "research",
+          timestamp: Date.now() - 10800000,
+          likes: 18,
+          replies: 5,
+          tags: ["hieroglyphics", "ptolemaic", "collaboration"],
+        },
+      ];
+    } catch (error) {
+      console.error("Failed to get community posts:", error);
+      return [];
+    }
+  }
+
+  static async createCommunityPost(post: {
+    title: string;
+    content: string;
+    category: "general" | "artifacts" | "research" | "events";
+  }): Promise<bigint> {
+    try {
+      const backend = getAslBackend();
+      if (!backend) throw new Error("Backend not available");
+
+      // For now, just return a mock ID. In a real implementation, this would call backend methods
+      console.log("Creating community post:", post);
+      return BigInt(Date.now());
+    } catch (error) {
+      console.error("Failed to create community post:", error);
+      throw error;
+    }
+  }
+
+  static async getUpcomingCommunityEvents(): Promise<
+    Array<{
+      id: number;
+      title: string;
+      date: string;
+      type: "workshop" | "exhibition" | "discussion" | "webinar";
+      participants: number;
+      maxParticipants: number;
+    }>
+  > {
+    try {
+      // For now, return mock data. In a real implementation, this would call backend methods
+      return [
+        {
+          id: 1,
+          title: "Digital Heritage Preservation Workshop",
+          date: "2025-08-25 14:00",
+          type: "workshop",
+          participants: 23,
+          maxParticipants: 50,
+        },
+        {
+          id: 2,
+          title: "Ancient Egyptian Art Exhibition Tour",
+          date: "2025-08-28 10:00",
+          type: "exhibition",
+          participants: 45,
+          maxParticipants: 100,
+        },
+        {
+          id: 3,
+          title: "AI in Archaeology Discussion Panel",
+          date: "2025-08-30 16:00",
+          type: "discussion",
+          participants: 18,
+          maxParticipants: 30,
+        },
+        {
+          id: 4,
+          title: "Blockchain for Cultural Heritage Webinar",
+          date: "2025-09-02 13:00",
+          type: "webinar",
+          participants: 67,
+          maxParticipants: 200,
+        },
+      ];
+    } catch (error) {
+      console.error("Failed to get upcoming community events:", error);
+      return [];
+    }
+  }
+
+  static async joinCommunityEvent(eventId: number): Promise<string> {
+    try {
+      const backend = getAslBackend();
+      if (!backend) throw new Error("Backend not available");
+
+      // For now, just log the action. In a real implementation, this would call backend methods
+      console.log("Joining event:", eventId);
+      return "success";
+    } catch (error) {
+      console.error("Failed to join event:", error);
+      throw error;
+    }
+  }
+
   // ========== VIRTUAL EVENTS ==========
 
   static async createVirtualEvent(
@@ -1402,8 +1575,14 @@ export const {
   getCollaborationRooms,
   getRoomMessages,
 
+  // Community
+  getCommunityStats,
+  getCommunityPosts,
+  createCommunityPost,
+
   // Virtual Events
   createVirtualEvent,
+  joinCommunityEvent,
   joinEvent,
   getUpcomingEvents,
 

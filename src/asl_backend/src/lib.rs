@@ -15,6 +15,13 @@ use modules::ai_analysis::{
     AIAnalysisResult, add_provenance_entry, get_provenance_chain, verify_provenance_integrity,
     analyze_artifact_with_ai, get_ai_analysis, get_similar_artifacts
 };
+use modules::community::{
+    create_community_post, create_community_reply, like_community_post, like_community_reply,
+    get_community_post, get_all_community_posts, get_community_posts_by_category,
+    get_community_posts_by_author, search_community_posts, get_community_stats,
+    get_featured_posts, get_pinned_posts, moderate_post,
+    CreatePostRequest, CreateReplyRequest, CommunityCategory, ModerationAction
+};
 // Commented out complex modules to reduce size
 // use modules::collaboration::{CollaborationRoom, Message, VirtualEvent};
 // use modules::analytics::{AnalyticsReport, PatternAnalysis};
@@ -673,6 +680,75 @@ fn get_user_profile(user_principal: Principal) -> Result<User, String> {
 fn get_current_user_profile() -> Result<User, String> {
     let caller = get_caller();
     get_user_profile(caller)
+}
+
+// ============================================================================
+// COMMUNITY MANAGEMENT
+// ============================================================================
+
+#[update]
+fn create_community_post_public(request: CreatePostRequest) -> Result<u64, String> {
+    create_community_post(request)
+}
+
+#[update]
+fn create_community_reply_public(request: CreateReplyRequest) -> Result<u64, String> {
+    create_community_reply(request)
+}
+
+#[update]
+fn like_community_post_public(post_id: u64) -> Result<String, String> {
+    like_community_post(post_id)
+}
+
+#[update]
+fn like_community_reply_public(post_id: u64, reply_id: u64) -> Result<String, String> {
+    like_community_reply(post_id, reply_id)
+}
+
+#[query]
+fn get_community_post_public(post_id: u64) -> Result<modules::community::CommunityPost, String> {
+    get_community_post(post_id)
+}
+
+#[query]
+fn get_all_community_posts_public() -> Vec<modules::community::CommunityPost> {
+    get_all_community_posts()
+}
+
+#[query]
+fn get_community_posts_by_category_public(category: CommunityCategory) -> Vec<modules::community::CommunityPost> {
+    get_community_posts_by_category(category)
+}
+
+#[query]
+fn get_community_posts_by_author_public(author: Principal) -> Vec<modules::community::CommunityPost> {
+    get_community_posts_by_author(author)
+}
+
+#[query]
+fn search_community_posts_public(query: String) -> Vec<modules::community::CommunityPost> {
+    search_community_posts(query)
+}
+
+#[query]
+fn get_community_stats_public() -> modules::community::CommunityStats {
+    get_community_stats()
+}
+
+#[query]
+fn get_featured_posts_public() -> Vec<modules::community::CommunityPost> {
+    get_featured_posts()
+}
+
+#[query]
+fn get_pinned_posts_public() -> Vec<modules::community::CommunityPost> {
+    get_pinned_posts()
+}
+
+#[update]
+fn moderate_post_public(post_id: u64, action: ModerationAction) -> Result<String, String> {
+    moderate_post(post_id, action)
 }
 
 // ============================================================================

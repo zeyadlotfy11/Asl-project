@@ -402,6 +402,7 @@ pub enum AuditEventType {
     AccessGranted,
     SecurityEvent,
     SystemMaintenance,
+    CommunityActivity,
 }
 
 #[derive(CandidType, Serialize, Deserialize, Clone, Debug)]
