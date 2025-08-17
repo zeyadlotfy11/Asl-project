@@ -1,8 +1,8 @@
-# 🏺 ASL (أصل) - Digital Heritage Preservation Platform
+# 🏺 Asl (أصل) - Digital Heritage Preservation Platform
 
 <div align="center">
 
-![ASL Logo](src/asl_frontend/public/Asl.png)
+![Asl Logo](src/asl_frontend/public/Asl.png)
 
 **"Preserving Egypt's Legacy Through Blockchain Innovation"**
 
@@ -12,13 +12,13 @@
 [![React](https://img.shields.io/badge/Frontend-React%20TypeScript-blue)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Build-Vite-purple)](https://vitejs.dev/)
 
-[🌟 Live Demo](http://localhost:3000) | [📖 Documentation](#documentation) | [🚀 Quick Start](#quick-start) | [🏗️ Architecture](#architecture)
+[📖 Documentation](#documentation) | [🚀 Quick Start](#quick-start) | [🏗️ Architecture](#architecture)
 
 </div>
 
 ## 📖 Introduction
 
-**ASL (أصل)** is a cutting-edge decentralized platform built on the Internet Computer Protocol (ICP) for preserving Egyptian cultural heritage. The platform combines blockchain immutability with modern web technologies to create tamper-proof records of artifacts, fostering global collaboration between institutions, researchers, and heritage enthusiasts.
+**Asl (أصل)** is a cutting-edge decentralized platform built on the Internet Computer Protocol (ICP) for preserving Egyptian cultural heritage. The platform combines blockchain immutability with modern web technologies to create tamper-proof records of artifacts, fostering global collaboration between institutions, researchers, and heritage enthusiasts.
 
 ### 🎯 Vision & Mission
 
@@ -35,13 +35,6 @@
 - ✅ **Advanced artifact management** with AI analysis integration
 - ✅ **Real-time collaboration** features and community engagement
 - ✅ **Mobile-responsive design** with Egyptian-themed UI/UX
-
-## 👥 Team
-
-| Role                                           | Name        | Expertise                              |
-| ---------------------------------------------- | ----------- | -------------------------------------- |
-| **Full Stack Developer & Blockchain Explorer** | Zeyad Lotfy | React, Rust, ICP, UI/UX Design         |
-| **Creative Strategist & Digital Narrator**     | Zyad Ashraf | Content Strategy, Digital Storytelling |
 
 ## 🏗️ Architecture
 
@@ -180,6 +173,10 @@ cd asl-heritage-platform
 cd src/asl_frontend
 npm install
 cd ../..
+
+# Install additional IC development tools
+npm run candid:install    # For Candid type generation
+npm run ic-wasm:install   # For WebAssembly optimization
 ```
 
 3. **Start local Internet Computer replica**
@@ -315,35 +312,6 @@ dfx deploy --network ic
 dfx canister install --mode upgrade asl_backend
 ```
 
-## 🧪 Testing & Quality Assurance
-
-### **Test Coverage**
-
-- **Unit Tests**: Individual component and function testing
-- **Integration Tests**: Cross-module functionality verification
-- **End-to-End Tests**: Complete user journey validation
-- **Performance Tests**: Load and stress testing
-- **Security Tests**: Vulnerability assessment
-
-### **Code Quality Tools**
-
-```bash
-# TypeScript compilation check
-npm run type-check
-
-# Code formatting
-npm run format
-
-# Linting
-npm run lint
-
-# Rust tests
-cargo test
-
-# Build verification
-npm run build
-```
-
 ## 🚧 Challenges Faced
 
 ### **Technical Challenges**
@@ -408,466 +376,6 @@ npm run build
 - 🔮 Blockchain interoperability
 - 🔮 Global heritage alliance
 
-## 🤝 Contributing
-
-We welcome contributions from the global heritage preservation community!
-
-### **How to Contribute**
-
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Commit your changes** (`git commit -m 'Add amazing feature'`)
-4. **Push to the branch** (`git push origin feature/amazing-feature`)
-5. **Open a Pull Request**
-
-### **Contribution Guidelines**
-
-- Follow TypeScript and Rust best practices
-- Include comprehensive tests for new features
-- Update documentation for API changes
-- Respect cultural sensitivity in heritage-related content
-- Ensure bilingual support for user-facing features
-
-### **Development Standards**
-
-- **Code Style**: Prettier for TypeScript, rustfmt for Rust
-- **Commit Messages**: Conventional commits format
-- **Documentation**: JSDoc for TypeScript, rustdoc for Rust
-- **Testing**: 80%+ test coverage requirement
-- **Security**: Security-first development practices
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🔗 Resources & Links
-
-### **Platform Links**
-
-- [Live Demo](http://localhost:3000) - Experience the platform
-- [API Documentation](docs/api.md) - Technical integration guide
-- [User Guide](docs/user-guide.md) - Platform usage instructions
-
-### **Technology Resources**
-
-- [Internet Computer (ICP)](https://internetcomputer.org/) - Blockchain platform
-- [DFINITY SDK](https://sdk.dfinity.org/) - Development tools
-- [Candid](https://github.com/dfinity/candid) - Interface description language
-- [IC Stable Structures](https://github.com/dfinity/stable-structures) - Storage library
-
-### **Community & Support**
-
-- [Discord Community](https://discord.gg/asl-heritage) - Join our community
-- [GitHub Issues](https://github.com/your-username/asl-heritage-platform/issues) - Report bugs
-- [Documentation](https://docs.asl-heritage.com) - Comprehensive guides
-- [Blog](https://blog.asl-heritage.com) - Latest updates and insights
-
----
-
-<div align="center">
-
-**ASL (أصل) - Preserving Egypt's Legacy Through Blockchain Innovation** 🏛️✨
-
-_"Every artifact tells a story of a civilization that spanned thousands of years"_
-
-**Built with ❤️ by the ASL Team**
-
-</div>
-
-🔐 **Verified Submissions via Internet Identity**
-
-- Secure submissions from trusted institutions (museums, scholars)
-- Cryptographically signed data ensures credibility
-
-🌍 **Open Access API**
-
-- Researchers, ministries, and international organizations access certified data
-- Permissioned APIs for global collaboration (Interpol, UNESCO)
-
-## 🛠️ Technical Stack
-
-- **Frontend**: Next.js 14 with TypeScript, Egyptian-themed UI
-- **Backend**: Rust canisters on Internet Computer Protocol (ICP)
-- **Authentication**: Internet Identity (II) for secure access
-- **Storage**: On-chain stable memory for permanent data persistence
-- **Smart Contracts**: Rust-based canisters for artifact management
-- **Design**: Egyptian heritage-inspired interface with Arabic/English support
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-1. Install the [DFINITY Canister SDK](https://sdk.dfinity.org/docs/quickstart/local-quickstart.html)
-2. Install [Node.js](https://nodejs.org/en/download/) (v18+ recommended)
-3. Install [Rust](https://www.rust-lang.org/tools/install) (latest stable)
-
-### Installation & Setup
-
-### Installation & Setup
-
-**Step 1: Install Dependencies**
-
-```bash
-# Install Node.js dependencies
-yarn install
-# or
-npm install
-
-# Install candid extractor for type generation
-yarn candid:install
-# or
-npm run candid:install
-
-# Install ic-wasm for canister optimization
-yarn ic-wasm:install
-# or
-npm run ic-wasm:install
-```
-
-**Step 2: Start Local Internet Computer**
-
-```bash
-# Start the local ICP replica
-yarn dfx:start
-# or
-npm run dfx:start
-```
-
-**Step 3: Deploy Canisters**
-
-```bash
-# Deploy to local network
-yarn deploy
-# or
-npm run deploy
-```
-
-**Step 4: Launch Development Server**
-
-```bash
-# Start Next.js development server
-yarn dev
-# or
-npm run dev
-```
-
-🌐 Open [http://localhost:3000](http://localhost:3000) to explore the ASL platform
-
-## 🌍 Production Deployment
-
-Deploy to the Internet Computer mainnet:
-
-```bash
-# Deploy canisters to IC mainnet
-yarn deploy --network=ic
-# or
-npm run deploy --network=ic
-```
-
-## 🚀 Complete Local Development Setup
-
-### 📋 Prerequisites Checklist
-
-Before starting, ensure you have these tools installed:
-
-```bash
-# Check Node.js version (should be 18+)
-node --version
-
-# Check npm/yarn
-npm --version
-# or
-yarn --version
-
-# Check Rust installation
-rustc --version
-cargo --version
-
-# Check DFX SDK
-dfx --version
-```
-
-If any are missing, install them:
-
-- **Node.js**: [Download from nodejs.org](https://nodejs.org/en/download/) (v18+ recommended)
-- **Rust**: Run `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-- **DFX SDK**: Run `sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"`
-
-### 🛠️ Step-by-Step Local Setup
-
-**Step 1: Clone & Navigate**
-
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd asl-digital-archive
-
-# Verify you're in the right directory
-ls -la
-# Should see: dfx.json, package.json, src/, backend/, etc.
-```
-
-**Step 2: Install All Dependencies**
-
-```bash
-# Install Node.js dependencies for the frontend
-npm install
-# or if you prefer yarn
-yarn install
-
-# Install additional IC development tools
-npm run candid:install    # For Candid type generation
-npm run ic-wasm:install   # For WebAssembly optimization
-
-# Verify installations
-ls node_modules/.bin | grep -E "(candid-extractor|ic-wasm)"
-```
-
-**Step 3: Start Local Internet Computer**
-
-```bash
-# Start the local ICP replica in background
-dfx start --background
-
-# Alternative: Start in foreground (shows logs)
-dfx start
-
-# Verify it's running
-dfx ping local
-# Should return: "Pinging local replica..."
-```
-
-**Step 4: Deploy Rust Canisters**
-
-```bash
-# Deploy the hello canister to local network
-dfx deploy
-
-# Alternative: Deploy specific canister
-dfx deploy hello
-
-# Verify deployment
-dfx canister status hello
-# Should show: Status: Running
-```
-
-**Step 5: Generate TypeScript Declarations**
-
-```bash
-# Generate TypeScript bindings from Candid
-dfx generate hello
-
-# Verify generated files
-ls src/declarations/hello/
-# Should show: hello.did.d.ts, index.d.ts, etc.
-```
-
-**Step 6: Launch Development Server**
-
-```bash
-# Start Next.js development server
-npm run dev
-# or
-yarn dev
-
-# Server should start on http://localhost:3000
-```
-
-**Step 7: Verify Everything Works**
-
-```bash
-# Open browser and navigate to:
-# http://localhost:3000
-
-# You should see:
-# ✅ ASL landing page with pharaoh animations
-# ✅ Egyptian-themed navigation
-# ✅ Ability to browse artifacts page
-# ✅ No console errors in browser dev tools
-```
-
-### 🔧 Development Workflow
-
-**Daily Development Routine:**
-
-```bash
-# 1. Start your development session
-dfx start --background          # Start IC replica
-npm run dev                     # Start Next.js server
-
-# 2. Make changes to your code
-# Edit files in src/ for frontend changes
-# Edit files in backend/hello/src/ for canister changes
-
-# 3. After backend changes, redeploy
-dfx deploy hello                # Deploy updated canister
-dfx generate hello              # Regenerate TypeScript types
-
-# 4. Frontend changes auto-reload (no restart needed)
-# Just save your files and see changes in browser
-```
-
-**Useful Development Commands:**
-
-```bash
-# View canister logs
-dfx canister logs hello
-
-# Check canister status
-dfx canister status hello
-
-# Reset local state (if needed)
-dfx stop
-rm -rf .dfx
-dfx start --background --clean
-
-# Check frontend build
-npm run build
-npm run start
-
-# Type checking
-npm run type-check
-# or
-npx tsc --noEmit
-```
-
-### 🚨 Troubleshooting Common Issues
-
-**Issue 1: "Cannot connect to IC replica"**
-
-```bash
-# Solution: Ensure DFX is running
-dfx ping local
-# If fails, restart DFX
-dfx stop
-dfx start --background
-```
-
-**Issue 2: "Module not found" TypeScript errors**
-
-```bash
-# Solution: Regenerate declarations
-dfx generate hello
-# Then restart your dev server
-npm run dev
-```
-
-**Issue 3: "Canister not found" errors**
-
-```bash
-# Solution: Deploy canisters
-dfx deploy
-# Check deployment status
-dfx canister status hello
-```
-
-**Issue 4: Port 3000 already in use**
-
-```bash
-# Solution: Use different port
-npm run dev -- --port 3001
-# or kill existing process
-lsof -ti:3000 | xargs kill -9
-```
-
-**Issue 5: Build fails with Rust errors**
-
-```bash
-# Solution: Clean and rebuild
-cargo clean
-dfx deploy --mode development
-```
-
-### 📱 Testing Your Application
-
-**Frontend Testing:**
-
-```bash
-# Test all pages load correctly
-curl http://localhost:3000/              # Landing page
-curl http://localhost:3000/artifacts     # Artifacts page
-curl http://localhost:3000/about         # About page
-
-# Check for JavaScript errors in browser console
-# Navigate to each page and verify animations work
-```
-
-**Backend Testing:**
-
-```bash
-# Test canister functions directly
-dfx canister call hello get_total_count
-dfx canister call hello list_artifacts
-
-# Test artifact submission
-dfx canister call hello submit_artifact '("Test Artifact", "Cairo", "10x10cm", "https://example.com/image.jpg")'
-```
-
-### 🌐 Production Deployment Checklist
-
-Before deploying to IC mainnet:
-
-```bash
-# 1. Ensure everything works locally
-npm run build                    # Check frontend builds
-dfx deploy --network local       # Test local deployment
-
-# 2. Optimize for production
-npm run ic-wasm:install         # Install optimization tools
-dfx build --network ic          # Build for IC network
-
-# 3. Deploy to mainnet
-dfx deploy --network ic --with-cycles 1000000000000
-
-# 4. Verify deployment
-dfx canister --network ic status hello
-```
-
-### 🔄 Quick Start Script
-
-Create a setup script for new developers:
-
-```bash
-# Create setup-dev.sh
-#!/bin/bash
-echo "🏛️ Setting up ASL Development Environment..."
-
-# Check prerequisites
-command -v node >/dev/null 2>&1 || { echo "❌ Node.js required but not installed."; exit 1; }
-command -v dfx >/dev/null 2>&1 || { echo "❌ DFX SDK required but not installed."; exit 1; }
-command -v cargo >/dev/null 2>&1 || { echo "❌ Rust required but not installed."; exit 1; }
-
-echo "✅ Prerequisites check passed"
-
-# Install dependencies
-echo "📦 Installing dependencies..."
-npm install
-npm run candid:install
-npm run ic-wasm:install
-
-# Start services
-echo "🚀 Starting local IC replica..."
-dfx start --background
-
-# Deploy canisters
-echo "📋 Deploying canisters..."
-dfx deploy
-
-# Generate types
-echo "🔧 Generating TypeScript declarations..."
-dfx generate hello
-
-echo "🎉 Setup complete! Run 'npm run dev' to start development server"
-echo "🌐 Visit http://localhost:3000 to see your ASL application"
-```
-
-Make it executable and run:
-
-```bash
-chmod +x setup-dev.sh
-./setup-dev.sh
-```
-
 ## 🎯 Key Features & Use Cases
 
 ### For Museums & Institutions
@@ -913,49 +421,60 @@ chmod +x setup-dev.sh
 - **Digital Preservation**: Safeguards cultural data for future generations
 - **Educational Value**: Promotes awareness of Egyptian archaeological treasures
 
-## 🛣️ Development Roadmap
+## 🤝 Contributing
 
-### Phase 1: MVP (Current)
+We welcome contributions from the global heritage preservation community!
 
-- ✅ Basic artifact registry with CRUD operations
-- ✅ Egyptian-themed UI with pharaoh animations
-- ✅ Community verification system
-- ✅ ICP canister deployment
+### **How to Contribute**
 
-### Phase 2: Enhanced Features
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Commit your changes** (`git commit -m 'Add amazing feature'`)
+4. **Push to the branch** (`git push origin feature/amazing-feature`)
+5. **Open a Pull Request**
 
-- 🔄 Internet Identity integration
-- 🔄 Advanced search and filtering
-- 🔄 Mobile-responsive design
-- 🔄 Multilingual support (Arabic/English)
+### **Contribution Guidelines**
 
-### Phase 3: Expansion
+- Follow TypeScript and Rust best practices
+- Include comprehensive tests for new features
+- Update documentation for API changes
+- Respect cultural sensitivity in heritage-related content
+- Ensure bilingual support for user-facing features
 
-- 📋 NFT minting for heritage certificates
-- 📋 DAO governance implementation
-- 📋 Ministry API integration
-- 📋 International partnership portals
+### **Development Standards**
 
-### Phase 4: Scale
+- **Code Style**: Prettier for TypeScript, rustfmt for Rust
+- **Commit Messages**: Conventional commits format
+- **Documentation**: JSDoc for TypeScript, rustdoc for Rust
+- **Testing**: 80%+ test coverage requirement
+- **Security**: Security-first development practices
 
-- 📋 AI-assisted metadata classification
-- 📋 Intangible heritage documentation
-- 📋 Regional expansion (MENA countries)
-- 📋 Global museum integration APIs
+## 📄 License
 
-## 🔗 Resources & Documentation
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-- **Internet Computer (ICP)**: [DFINITY Canister SDK](https://sdk.dfinity.org/docs/quickstart/local-quickstart.html)
-- **Rust Programming**: [Rust Official Documentation](https://www.rust-lang.org/)
-- **Next.js Framework**: [Next.js Documentation](https://nextjs.org/)
-- **IC Reactor**: [React Integration Library](https://github.com/B3Pay/ic-reactor)
-- **Candid Interface**: [Interface Description Language](https://github.com/dfinity/candid)
-- **IC-Wasm**: [WebAssembly Optimization](https://github.com/dfinity/ic-wasm)
+## 🔗 Resources & Links
+
+### **Technology Resources**
+
+- [Internet Computer (ICP)](https://internetcomputer.org/) - Blockchain platform
+- [DFINITY SDK](https://sdk.dfinity.org/) - Development tools
+- [Candid](https://github.com/dfinity/candid) - Interface description language
+- [IC Stable Structures](https://github.com/dfinity/stable-structures) - Storage library
+- [Rust Programming](https://www.rust-lang.org/) - Rust Official Documentation
+- [React Documentation](https://reactjs.org/) - React Framework
+- [Vite](https://vitejs.dev/) - Build Tool
 
 ---
+
+<div align="center">
 
 **ASL (أصل) - Preserving Egypt's Legacy Through Blockchain Innovation** 🏛️✨
 
 _"Every artifact tells a story of a civilization that spanned thousands of years"_
 
+**Built with ❤️ by the ASL Team**
+
 [Demo Video](https://youtu.be/67XkRfEOP5A?si=4m0D986m9M7OECUb)
+
+</div>
