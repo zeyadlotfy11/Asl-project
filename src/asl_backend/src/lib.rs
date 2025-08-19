@@ -3,7 +3,7 @@ use candid::{CandidType, Principal};
 use ic_cdk::{query, update, init, pre_upgrade, post_upgrade};
 use serde::{Deserialize, Serialize};
 
-// Modular Architecture - Simplified for size optimization
+// Modular Architecture 
 mod modules;
 use modules::types::*;
 use modules::storage::*;
@@ -22,10 +22,6 @@ use modules::community::{
     get_featured_posts, get_pinned_posts, moderate_post,
     CreatePostRequest, CreateReplyRequest, CommunityCategory, ModerationAction
 };
-// Commented out complex modules to reduce size
-// use modules::collaboration::{CollaborationRoom, Message, VirtualEvent};
-// use modules::analytics::{AnalyticsReport, PatternAnalysis};
-// use modules::gamification::{EnhancedNFT, UserProgress, Quest};
 
 use modules::artifacts::{
     create_artifact, update_artifact_status,
@@ -42,23 +38,11 @@ use modules::nft::{
     get_nft, get_nft_by_artifact, get_nfts_by_owner, get_all_nfts
 };
 
-// Additional AI analysis functions already imported above
-
-// Commented out complex functionality to reduce size
-// use modules::collaboration::{
-//     create_collaboration_room, send_message, add_reaction, get_collaboration_rooms,
-//     get_room_messages, create_virtual_event, join_event, get_upcoming_events
-// };
-// use modules::analytics::{
-//     generate_analytics_report, get_analytics_report, get_pattern_analysis
-// };
-// use modules::gamification::{
-//     award_achievement, create_quest, join_quest, get_user_progress,
-//     get_leaderboard, get_active_quests, get_enhanced_nft, get_user_nfts
-// };
 
 // ============================================================================
 // USER MANAGEMENT SYSTEM
+// Service for handling user registration, authentication, and role management
+// Provides secure user onboarding with role-based permissions and verification
 // ============================================================================
 
 #[update]
@@ -96,7 +80,7 @@ fn register_user(role: UserRole, institution: Option<String>, specialization: Ve
         UserRole::Institution => UserPermissions {
             can_submit_artifacts: true,
             can_create_proposals: true,
-            can_vote: true, // Requires verification first
+            can_vote: true, 
             can_verify_institutions: true,
             can_moderate: true,
             voting_weight: 3,
@@ -104,7 +88,7 @@ fn register_user(role: UserRole, institution: Option<String>, specialization: Ve
         UserRole::Expert => UserPermissions {
             can_submit_artifacts: true,
             can_create_proposals: true,
-            can_vote: false, // Requires verification first
+            can_vote: false, 
             can_verify_institutions: false,
             can_moderate: false,
             voting_weight: 2,
@@ -160,7 +144,9 @@ fn register_user(role: UserRole, institution: Option<String>, specialization: Ve
 }
 
 // ============================================================================
-// AI ANALYSIS AMAZING FEATURES
+// AI ANALYSIS & PROVENANCE SERVICES
+// Advanced artifact analysis using AI algorithms and blockchain provenance tracking
+// Provides intelligent artifact classification, similarity detection, and chain of custody
 // ============================================================================
 
 #[update]
@@ -201,176 +187,9 @@ fn verify_provenance_integrity_public(artifact_id: u64) -> Result<bool, String> 
 }
 
 // ============================================================================
-// COLLABORATION FEATURES - COMMENTED OUT TO REDUCE CANISTER SIZE
-// ============================================================================
-
-// #[update]
-// fn create_collaboration_room_public(
-//     title: String,
-//     description: String,
-//     artifact_id: Option<u64>,
-//     is_private: bool,
-// ) -> Result<u64, String> {
-//     // Use available enum variants
-//     create_collaboration_room(
-//         modules::collaboration::RoomType::ArtifactDiscussion,
-//         title,
-//         description,
-//         artifact_id,
-//         None, // proposal_id
-//         is_private,
-//         modules::collaboration::AccessLevel::Public
-//     )
-// }
-
-// #[update]
-// fn send_message_public(
-//     room_id: u64,
-//     content: String,
-//     reply_to: Option<u64>,
-// ) -> Result<u64, String> {
-//     send_message(
-//         room_id,
-//         content,
-//         modules::collaboration::MessageType::Text,
-//         reply_to,
-//         Vec::new() // empty attachments
-//     )
-// }
-
-// #[update]
-// fn add_reaction_public(message_id: u64, emoji: String) -> Result<String, String> {
-//     add_reaction(message_id, emoji)
-// }
-
-// #[update]
-// fn create_virtual_event_public(
-//     title: String,
-//     description: String,
-//     start_time: u64,
-//     duration_minutes: u32,
-// ) -> Result<u64, String> {
-//     create_virtual_event(
-//         title,
-//         description,
-//         modules::collaboration::EventType::PanelDiscussion,
-//         start_time,
-//         start_time + (duration_minutes as u64 * 60), // convert duration to end_time
-//         None // artifact_focus
-//     )
-// }
-
-// #[update]
-// fn join_event_public(event_id: u64) -> Result<String, String> {
-//     join_event(event_id)
-// }
-
-// #[query]
-// fn get_collaboration_rooms_public() -> Vec<CollaborationRoom> {
-//     get_collaboration_rooms()
-// }
-
-// #[query]
-// fn get_room_messages_public(room_id: u64, limit: Option<usize>) -> Vec<Message> {
-//     get_room_messages(room_id, limit)
-// }
-
-// #[query]
-// fn get_upcoming_events_public() -> Vec<VirtualEvent> {
-//     get_upcoming_events()
-// }
-
-// ============================================================================
-// ANALYTICS FEATURES - COMMENTED OUT TO REDUCE CANISTER SIZE
-// ============================================================================
-
-// #[update]
-// fn generate_analytics_report_public(
-//     report_type: String,
-//     start_time: Option<u64>,
-//     end_time: Option<u64>,
-// ) -> Result<u64, String> {
-//     // Use available enum variants
-//     let r_type = modules::analytics::ReportType::UserEngagement;
-//     generate_analytics_report(r_type, start_time, end_time)
-// }
-
-// #[query]
-// fn get_analytics_report_public(report_id: u64) -> Result<AnalyticsReport, String> {
-//     get_analytics_report(report_id)
-// }
-
-// #[query]
-// fn get_pattern_analysis_public() -> Vec<PatternAnalysis> {
-//     get_pattern_analysis()
-// }
-
-// ============================================================================
-// GAMIFICATION FEATURES - COMMENTED OUT TO REDUCE CANISTER SIZE
-// ============================================================================
-
-// #[update]
-// fn mint_enhanced_nft_public(
-//     artifact_id: u64,
-// ) -> Result<u64, String> {
-//     // Simplified enhanced NFT minting - use existing NFT system
-//     issue_heritage_nft(artifact_id)
-// }
-
-// #[update]
-// fn award_achievement_public(user: Principal, achievement_title: String, progress: f64) -> Result<String, String> {
-//     award_achievement(user, achievement_title, progress)
-// }
-
-// #[update]
-// fn create_quest_public(
-//     title: String,
-//     description: String,
-//     duration_days: u32,
-// ) -> Result<u64, String> {
-//     // Simplified quest creation using available enum variants
-//     create_quest(
-//         title,
-//         description,
-//         Vec::new(), // objectives
-//         Vec::new(), // rewards  
-//         duration_days as u64,
-//         modules::gamification::QuestType::Educational,
-//     )
-// }
-
-// #[update]
-// fn join_quest_public(quest_id: u64) -> Result<String, String> {
-//     join_quest(quest_id)
-// }
-
-// #[query]
-// fn get_user_progress_public(user: Principal) -> Option<UserProgress> {
-//     get_user_progress(user)
-// }
-
-// #[query]
-// fn get_leaderboard_public(limit: usize) -> Vec<(Principal, u64)> {
-//     get_leaderboard(limit)
-// }
-
-// #[query]
-// fn get_active_quests_public() -> Vec<Quest> {
-//     get_active_quests()
-// }
-
-// #[query]
-// fn get_enhanced_nft_public(token_id: u64) -> Option<EnhancedNFT> {
-//     get_enhanced_nft(token_id)
-// }
-
-// #[query]
-// fn get_user_nfts_public(user: Principal) -> Vec<EnhancedNFT> {
-//     get_user_nfts(user)
-// }
-
-// ============================================================================
-// VOTING SYSTEM FEATURES
+// VOTING SYSTEM SERVICES
+// Decentralized voting mechanism for artifact verification and DAO governance
+// Enables community-driven decision making with weighted voting and proposal management
 // ============================================================================
 
 #[update]
@@ -403,7 +222,9 @@ fn get_vote_details_public(proposal_id: u64) -> Result<Vec<Vote>, String> {
 }
 
 // ============================================================================
-// DAO PROPOSAL FEATURES
+// DAO PROPOSAL SERVICES
+// Decentralized Autonomous Organization governance for heritage preservation
+// Enables community proposals, execution, and collaborative decision-making processes
 // ============================================================================
 
 #[update]
@@ -446,7 +267,9 @@ fn get_proposals_by_status_public(status: ProposalStatus) -> Vec<ProposalRespons
 }
 
 // ============================================================================
-// ARTIFACTS MODULE FEATURES
+// ARTIFACTS MANAGEMENT SERVICES
+// Core artifact registration, storage, and lifecycle management system
+// Provides immutable artifact records with metadata, provenance, and verification status
 // ============================================================================
 
 #[update]
@@ -514,7 +337,9 @@ fn get_artifacts_by_creator_public(creator: Principal) -> Vec<Artifact> {
 }
 
 // ============================================================================
-// NFT MODULE FEATURES
+// NFT HERITAGE CERTIFICATE SERVICES
+// Non-fungible token system for heritage authentication and ownership tracking
+// Issues immutable digital certificates linked to verified artifacts for provenance proof
 // ============================================================================
 
 #[update]
@@ -553,7 +378,9 @@ fn get_all_nfts_public() -> Vec<ProofOfHeritageNFT> {
 }
 
 // ============================================================================
-// USER MANAGEMENT & VERIFICATION
+// USER VERIFICATION & MANAGEMENT SERVICES
+// Advanced user verification system with role-based access control  
+// Manages expert validation, institutional verification, and user permissions
 // ============================================================================
 
 #[update]
@@ -683,7 +510,9 @@ fn get_current_user_profile() -> Result<User, String> {
 }
 
 // ============================================================================
-// COMMUNITY MANAGEMENT
+// COMMUNITY MANAGEMENT SERVICES
+// Social platform for heritage enthusiasts, researchers, and institutions
+// Provides discussion forums, content moderation, and community engagement features
 // ============================================================================
 
 #[update]
@@ -861,16 +690,7 @@ pub struct HealthStatus {
     pub uptime: u64,
 }
 
-// ============================================================================
-// CANDID EXPORT (for automatic DID generation)
-// ============================================================================
-// dfx will call this special query (legacy name) if present to extract the
-// complete interface instead of relying on a stale manually maintained DID file.
-// After deploying or while the replica is running you can run:
-//   dfx canister call asl-proj-backend __get_candid_interface_tmp_hack > src/asl-proj-backend/asl-proj-backend.did
-// Or update dfx.json to omit the static "candid" path so dfx generates automatically.
 
-// (Optional) Unit test helper to print candid when running `cargo test` locally.
 #[cfg(test)]
 mod candid_tests {
     use super::*;

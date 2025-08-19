@@ -67,31 +67,31 @@
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    Frontend (React/TS)                  │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────┐   │
-│  │   Pages     │ │ Components  │ │    Contexts     │   │
-│  │             │ │             │ │                 │   │
-│  │ • Home      │ │ • Layout    │ │ • Language      │   │
-│  │ • Community │ │ • Artifact  │ │ • Theme         │   │
-│  │ • Artifacts │ │ • Community │ │ • Auth          │   │
-│  │ • Profile   │ │ • Forms     │ │                 │   │
-│  └─────────────┘ └─────────────┘ └─────────────────┘   │
+│                    Frontend (React/TS) Canister         │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────┐    │
+│  │   Pages     │ │ Components  │ │    Contexts     │    │
+│  │             │ │             │ │                 │    │
+│  │ • Home      │ │ • Layout    │ │ • Language      │    │
+│  │ • Community │ │ • Artifact  │ │ • Theme         │    │
+│  │ • Artifacts │ │ • Community │ │ • Auth          │    │
+│  │ • Profile   │ │ • Forms     │ │                 │    │
+│  └─────────────┘ └─────────────┘ └─────────────────┘    │
 └─────────────────────────────────────────────────────────┘
                               │
                     ┌─────────┴─────────┐
-                    │   ICP Network     │
+                       ICP Network ♾️
                     └─────────┬─────────┘
                               │
 ┌─────────────────────────────────────────────────────────┐
-│                  Backend (Rust Canister)               │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────┐   │
-│  │   Modules   │ │   Storage   │ │    Services     │   │
-│  │             │ │             │ │                 │   │
-│  │ • Artifacts │ │ • StableBT  │ │ • Validation    │   │
-│  │ • Community │ │ • Memory    │ │ • Authentication│   │
-│  │ • DAO       │ │ • Log       │ │ • Governance    │   │
-│  │ • Users     │ │             │ │ • Analytics     │   │
-│  └─────────────┘ └─────────────┘ └─────────────────┘   │
+│                  Backend (Rust Canister)                │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────┐    │
+│  │   Modules   │ │   Storage   │ │    Services     │    │
+│  │             │ │             │ │                 │    │
+│  │ • Artifacts │ │ • StableBT  │ │ • Validation    │    │
+│  │ • Community │ │ • Memory    │ │ • Authentication│    │
+│  │ • DAO       │ │ • Log       │ │ • Governance    │    │
+│  │ • Users     │ │             │ │ • Analytics     │    │
+│  └─────────────┘ └─────────────┘ └─────────────────┘    │
 └─────────────────────────────────────────────────────────┘
 ```
 
