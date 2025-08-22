@@ -12,6 +12,8 @@
 [![React](https://img.shields.io/badge/Frontend-React%20TypeScript-blue)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Build-Vite-purple)](https://vitejs.dev/)
 
+🌐 **[Live Demo on IC Mainnet](https://maptp-dyaaa-aaaac-a364a-cai.icp0.io/)** 🌐
+
 </div>
 
 ## 📖 Introduction
@@ -28,6 +30,7 @@
 ### 🏆 Key Achievements
 
 - ✅ **Full-stack decentralized application** on Internet Computer
+- ✅ **Successfully deployed on IC Mainnet** - Live at [maptp-dyaaa-aaaac-a364a-cai.icp0.io](https://maptp-dyaaa-aaaac-a364a-cai.icp0.io/)
 - ✅ **Community-driven governance** with DAO features
 - ✅ **Bilingual support** (Arabic/English) with RTL layout
 - ✅ **Advanced artifact management** with AI analysis integration
@@ -290,12 +293,12 @@ chmod +x scripts/setup-dev.sh
 
 ### **Canister IDs**
 
-| Service      | Network | Canister ID                   | Status     |
-| ------------ | ------- | ----------------------------- | ---------- |
-| ASL Backend  | Local   | `rdmx6-jaaaa-aaaaa-aaadq-cai` | 🟢 Active  |
-| ASL Frontend | Local   | `rrkah-fqaaa-aaaaa-aaaaq-cai` | 🟢 Active  |
-| ASL Backend  | Mainnet | `TBD`                         | 🔄 Pending |
-| ASL Frontend | Mainnet | `TBD`                         | 🔄 Pending |
+| Service      | Network | Canister ID                   | Status    |
+| ------------ | ------- | ----------------------------- | --------- |
+| ASL Backend  | Local   | `rdmx6-jaaaa-aaaaa-aaadq-cai` | 🟢 Active |
+| ASL Frontend | Local   | `rrkah-fqaaa-aaaaa-aaaaq-cai` | 🟢 Active |
+| ASL Backend  | Mainnet | `maptp-dyaaa-aaaac-a364a-cai` | � Active  |
+| ASL Frontend | Mainnet | `maptp-dyaaa-aaaac-a364a-cai` | � Active  |
 
 ### **Deployment Commands**
 
