@@ -88,9 +88,11 @@ describe('Dashboard Component', () => {
         const mockBackendService = await import('../../services/IntegratedBackendService')
         vi.mocked(mockBackendService.BackendService.getUserProfile)
             .mockResolvedValueOnce({
-                id: 'test_user',
-                username: 'TestUser',
-                reputation_score: 750,
+                institution: ['Test Institution'],
+                role: { 'Expert': null },
+                reputation: 750,
+                verified_at: [BigInt(Date.now())],
+                specialization: ['Testing'],
             })
 
         renderWithProviders(<Dashboard />)

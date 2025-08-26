@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import IntegratedBackendService from "../IntegratedBackendService";
+import { BackendService } from "../IntegratedBackendService";
 
 // Mock @dfinity/agent
 vi.mock("@dfinity/agent", () => ({
@@ -28,12 +28,12 @@ vi.mock("@dfinity/agent", () => ({
 }));
 
 describe("IntegratedBackendService", () => {
-  let service: typeof IntegratedBackendService;
+  let service: typeof BackendService;
   let mockActor: any;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    service = IntegratedBackendService;
+    service = BackendService;
     mockActor = vi.mocked(require("@dfinity/agent").Actor.createActor());
   });
 
