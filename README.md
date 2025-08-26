@@ -337,6 +337,48 @@ npm run test:ui
 - **Audit Trails**: Complete action logging and tracking
 - **Data Sovereignty**: User-controlled information management
 
+### 🌊 User Flow Diagrams
+
+The ASL platform features comprehensive user flow diagrams that illustrate key user journeys and interaction patterns across all platform features. These visual flows demonstrate how different user types navigate the sophisticated heritage preservation ecosystem.
+
+#### **🔄 Main Platform Flow**
+
+![Main User Flow](architecture/userFlow/main.png)
+
+#### **🔐 Authentication Flow**
+
+![Authentication Flow](architecture/userFlow/authentication-flow.png)
+
+#### **🧭 Navigation Flow**
+
+![Navigation Flow](architecture/userFlow/navigation-flow.png)
+
+#### **🏺 Artifact Management Flow**
+
+![Artifact Management Flow](architecture/userFlow/artifact-managmennt-flow.png)
+
+#### **👁️ Artifact Viewing Flow**
+
+![Artifact View Flow](architecture/userFlow/artifact-view-flow.png)
+
+#### **🗳️ Voting & Governance Flow**
+
+![Voting Flow](architecture/userFlow/voting-flow.png)
+
+#### **👥 Community Interaction Flow**
+
+![Community Flow](architecture/userFlow/community-flow.png)
+
+#### **⚙️ Services Hub Flow**
+
+![Services Flow](architecture/userFlow/sevices.png)
+
+#### **📊 Analytics & Insights Flow**
+
+![Analytics Flow](architecture/userFlow/Analytics.png)
+
+These user flow diagrams showcase the platform's intuitive design and comprehensive feature set, demonstrating how blockchain technology seamlessly integrates with user-friendly interfaces to create an exceptional heritage preservation experience.
+
 ## 🏛️ ICP Features Used
 
 ### **Core ICP Capabilities**
