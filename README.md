@@ -219,6 +219,72 @@ chmod +x scripts/setup-dev.sh
 ./scripts/setup-dev.sh
 ```
 
+## 🎥 Demo Videos
+
+### 📺 **Demo Video**
+
+[![ASL Demo Video](https://img.youtube.com/vi/C5KdRCh_Sek/0.jpg)](https://youtu.be/C5KdRCh_Sek)
+
+Watch our comprehensive demo showcasing the full functionality of the ASL platform, including artifact management, community features, and blockchain integration.
+
+**🔗 [Watch Demo Video](https://youtu.be/C5KdRCh_Sek)**
+
+### 🎤 **Pitch Video**
+
+[![ASL Pitch Video](https://img.youtube.com/vi/5isksxXc1RQ/0.jpg)](https://youtu.be/5isksxXc1RQ)
+
+Learn about our vision, mission, and the innovative approach we're taking to preserve Egyptian cultural heritage through blockchain technology.
+
+**🔗 [Watch Pitch Video](https://youtu.be/5isksxXc1RQ)**
+
+## 🧪 Testing
+
+ASL features robust testing infrastructure ensuring platform reliability and security. Our comprehensive test suite covers backend logic, frontend components, integration workflows, and user interactions to maintain high code quality standards.
+
+ASL includes comprehensive test suites for both backend and frontend components. See [TESTING.md](TESTING.md) for detailed testing documentation.
+
+### **Backend Tests (Rust)**
+
+```bash
+cd src/asl_backend
+
+# Run all tests
+cargo test
+
+# Run with output
+cargo test -- --nocapture
+
+# Run specific test module
+cargo test integration_tests
+cargo test unit_tests
+```
+
+### **Frontend Tests (React/TypeScript)**
+
+```bash
+cd src/asl_frontend
+
+# Install test dependencies
+npm install
+
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests with UI
+npm run test:ui
+```
+
+### **Test Coverage**
+
+- ✅ **Backend**: User management, artifact operations, DAO governance, AI analysis
+- ✅ **Frontend**: Component testing, service layer, contexts, utilities, E2E workflows
+- ✅ **Integration**: Full application workflows and canister interactions
+- ✅ **Accessibility**: ARIA compliance, keyboard navigation, RTL support
+- ✅ **Performance**: Load testing, memory optimization, bundle analysis
+
 ## 📚 Documentation
 
 ### 🔥 Core Features
@@ -476,6 +542,7 @@ _"Every artifact tells a story of a civilization that spanned thousands of years
 
 **Built with ❤️ by the ASL Team**
 
-[Demo Video](https://youtu.be/67XkRfEOP5A?si=4m0D986m9M7OECUb)
+[Demo Video](https://youtu.be/C5KdRCh_Sek)
+[Pitch Video](https://youtu.be/5isksxXc1RQ)
 
 </div>
