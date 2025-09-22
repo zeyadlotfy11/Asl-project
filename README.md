@@ -13,6 +13,7 @@
 [![Vite](https://img.shields.io/badge/Build-Vite-purple)](https://vitejs.dev/)
 
 🌐 **[Live Demo on IC Mainnet](https://maptp-dyaaa-aaaac-a364a-cai.icp0.io/)** 🌐
+📱 **[Try Our App Now](https://github.com/zeyadlotfy11/Asl-project/releases/download/v1.0.0/app-release.apk)** 📱
 
 </div>
 
